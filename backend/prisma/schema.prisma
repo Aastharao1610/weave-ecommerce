@@ -35,34 +35,44 @@ enum PaymentStatus {
 }
 
 model User {
-  id        Int       @id @default(autoincrement())
-  email     String    @unique
-  name      String?
-  password  String
-  role      Role      @default(User)
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  orders    Order[]
-  cart      Cart?
-  wishlist  Wishlist?
-  reviews   Review[]
-  payments  Payment[]
+  id                     Int                      @id @default(autoincrement())
+  email                  String?                  @unique
+  phone                  String?                  @unique
+  name                   String?
+  password               String?
+  authProvider           String?
+  role                   Role                     @default(User)
+  createdAt              DateTime                 @default(now())
+  updatedAt              DateTime                 @updatedAt
+  verified               Boolean                  @default(false)
+  orders                 Order[]
+  cart                   Cart?
+  wishlist               Wishlist?
+  reviews                Review[]
+  payments               Payment[]
+  RefreshToken           RefreshToken[]
+  EmailVerificationToken EmailVerificationToken[]
+}
+
+model EmailVerificationToken {
+  id        Int      @id @default(autoincrement())
+  token     String   @unique
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+  expiresAt DateTime
 }
 
 model Category {
-  id          Int       @id @default(autoincrement())
+  id          Int     @id @default(autoincrement())
   name        String?
   description String?
-  parent      Category? @relation("SubCategories", fields: [parentId], references: [id])
-  parentId    Int?
   imageUrl    String?
-  products    Product[]
+
+  // parentId Int
+  // parent   Category?  @relation("CategoryHierarchy", fields: [parentId], references: [id])
+  // children Category[] @relation("CategoryHierarchy")
 
   Subcategory Subcategory[]
-  Category    Category[]
-  Category    Category[]
-  Category    Category?     @relation(fields: [categoryId], references: [id])
-  categoryId  Int?
 }
 
 model Subcategory {
@@ -89,8 +99,6 @@ model Product {
   basePrice     Float
   createdAt     DateTime         @default(now())
   updatedAt     DateTime         @default(now())
-  category      Category         @relation(fields: [categoryId], references: [id])
-  categoryId    Int
   variant       ProductVariant[]
   reviews       Review[]
   images        ProductImage[]
@@ -104,7 +112,7 @@ model ProductVariant {
   productId     Int
   color         String
   size          String
-  sku           String         @unique
+  sku           String
   stock         Int            @default(0)
   price         Float? // override price if needed
   createdAt     DateTime       @default(now())
@@ -140,8 +148,9 @@ model CartItem {
   cartId           Int
   productVariant   ProductVariant @relation(fields: [productVariantId], references: [id])
   productVariantId Int
-  quantity         Int            @default(1)
-  addedAt          DateTime       @default(now())
+
+  quantity Int      @default(1)
+  addedAt  DateTime @default(now())
 }
 
 model Wishlist {
@@ -158,6 +167,7 @@ model WishlistItem {
   wishlistId       Int
   productVariant   ProductVariant @relation(fields: [productVariantId], references: [id])
   productVariantId Int
+  quantity         Int            @default(1)
   addedAt          DateTime       @default(now())
 }
 
@@ -168,9 +178,25 @@ model Order {
   status    OrderStatus @default(PENDING)
   createdAt DateTime    @default(now())
   updatedAt DateTime    @updatedAt
-  total     Float
-  items     OrderItem[]
-  payment   Payment?
+
+  total Float
+
+  shippingName       String
+  shippingPhone      String
+  shippingStreet     String
+  shippingCity       String
+  shippingState      String
+  shippingPostalCode String
+  shippingCountry    String
+
+  billingStreet     String
+  billingCity       String
+  billingState      String
+  billingPostalCode String
+  billingCountry    String
+
+  items   OrderItem[]
+  payment Payment?
 }
 
 model OrderItem {
@@ -196,4 +222,15 @@ model Payment {
   updatedAt     DateTime      @updatedAt
   User          User?         @relation(fields: [userId], references: [id])
   userId        Int?
+}
+
+model RefreshToken {
+  id        Int      @id @default(autoincrement())
+  token     String   @unique
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int
+  createdAt DateTime @default(now())
+  expiresAt DateTime
+  ip        String?
+  userAgent String?
 }

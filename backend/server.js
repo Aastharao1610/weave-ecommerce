@@ -1,37 +1,43 @@
-// backend/server.js
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-import authRoutes from "./routes/auth.js";
-import productRoutes from "./routes/products/createProducts.js";
-import createCategoryRoutes from "./routes/category/createCategory.js";
-import updateCategoryRoutes from "./routes/category/updateCategory.js";
-import getCategoryRoutes from "./routes/category/getCategory.js";
-import deleteCategoryRoutes from "./routes/category/deleteCategory.js";
-import updateProductRoutes from "./routes/products/updateProduct.js";
-import deleteProductRoute from "./routes/products/deleteProduct.js";
 
+// Load environment variables
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+// Middleware
 app.use(cors());
 app.use(express.json());
 
-app.use("/api/auth", authRoutes);
-app.use("/api/category", createCategoryRoutes); // POST /api/category/create
-app.use("/api/category", updateCategoryRoutes);
-app.use("/api/category", getCategoryRoutes);
-app.use("/api/category", deleteCategoryRoutes);
-app.use("/api/products/", productRoutes);
-app.use("/api/products", updateProductRoutes);
-app.use("/api/products", deleteProductRoute);
+// 📦 Route Imports
+import authRoutes from "./routes/auth.route.js";
+import categoryRoutes from "./routes/category.route.js";
+import productRoutes from "./routes/product.route.js";
+import subCategoryRoutes from "./routes/subCategory.route.js";
+import variantRoutes from "./routes/productVariant.route.js";
+import imageRoutes from "./routes/prductImage.route.js";
+import cartRoutes from "./routes/cart.route.js";
+import wishlistRoutes from "./routes/wishlist.route.js";
+import orderRoutes from "./routes/order.route.js";
 
-app.get("/api/health", (req, res) => {
+app.use("/api/auth", authRoutes);
+app.use("/api/category", categoryRoutes);
+app.use("/api/products", productRoutes);
+app.use("/api/subCategory", subCategoryRoutes);
+app.use("/api/variants", variantRoutes);
+app.use("/api/images", imageRoutes);
+app.use("/api/cart", cartRoutes);
+app.use("/api/wishlist", wishlistRoutes);
+app.use("/api/orders", orderRoutes);
+
+app.get("/api", (req, res) => {
   res.json({ status: "Backend is running!" });
 });
 
 app.listen(PORT, () => {
   console.log(`🚀 Backend running at http://localhost:${PORT}`);
 });
+export default app;

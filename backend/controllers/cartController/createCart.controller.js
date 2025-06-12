@@ -26,7 +26,7 @@ const createCart = async (req, res) => {
       where: {
         cartId: cart.id,
         productVariantId,
-        priceAtPurchase: variant.price,
+        //priceAtPurchase: variant.price,
       },
     });
     if (existingItem) {
@@ -42,6 +42,7 @@ const createCart = async (req, res) => {
           cartId: cart.id,
           productVariantId,
           quantity,
+          // priceAtPurchase: variant.price,
         },
       });
     }

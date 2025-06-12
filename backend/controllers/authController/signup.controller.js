@@ -1,11 +1,11 @@
 import prisma from "../../lib/db.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { sendVerificationEmail } from "../../lib/Emailverification.js";
+import { sendVerificationEmail } from "../../lib/sendVerification.js";
 
 const signup = async (req, res) => {
   try {
-    const { email, password, name } = req.body;
+    const { email, password, name, phone } = req.body;
 
     if (!email || !password || !name || !phone) {
       return res.status(400).json({ error: "Missing required fields" });
@@ -28,7 +28,7 @@ const signup = async (req, res) => {
         name,
         phone,
         role: "User",
-        verifed: false,
+        verified: false,
       },
     });
 

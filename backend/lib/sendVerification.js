@@ -1,6 +1,6 @@
-import nodemailer from "nodemailer";
 import crypto from "crypto";
 import prisma from "./db.js";
+import { sendEmail } from "./mailer.js";
 
 export const sendVerificationEmail = async (user) => {
   const token = crypto.randomBytes(32).toString("hex");
@@ -13,15 +13,7 @@ export const sendVerificationEmail = async (user) => {
     },
   });
 
-  const transporter = nodemailer.createTransport({
-    service: "Gmail", // or SMTP settings
-    auth: {
-      user: process.env.ADMIN_EMAIL,
-      pass: process.env.ADMIN_EMAIL_NODEMAILER,
-    },
-  });
-
-  const verificationUrl = `${process.env.DOMAIN}/api/auth/verify-email?token=${token}`;
+  const verificationUrl = `${process.env.DOMAIN}api/auth/verify-email?token=${token}`;
 
   const html = `
     <h2>Verify your email</h2>
@@ -30,8 +22,7 @@ export const sendVerificationEmail = async (user) => {
     <p>This link will expire in 24 hours.</p>
   `;
 
-  await transporter.sendMail({
-    from: process.env.EMAIL_USER,
+  await sendEmail({
     to: user.email,
     subject: "Verify your email address",
     html,

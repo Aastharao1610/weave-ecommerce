@@ -100,7 +100,7 @@ const createOrder = async (req, res) => {
       const order = await tx.order.create({
         data: {
           userId: req.user.userId,
-          status: "PENDING",
+          status: "PROCESSING",
           total,
           ...shippingBillingInfo,
           items: {

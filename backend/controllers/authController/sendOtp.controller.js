@@ -5,6 +5,7 @@ const otpStore = new Map();
 
 export const sendOtp = async (req, res) => {
   const { phone } = req.body;
+  console.log(req.body);
 
   if (!phone) {
     return res.status(400).json({ error: "Phone number is required" });

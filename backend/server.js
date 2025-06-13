@@ -5,7 +5,7 @@ import dotenv from "dotenv";
 dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
-
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 import webhookHandler from "./controllers/paymentController/webhook.controller.js";
 app.post(
   "/api/payments/webhookHandler",
@@ -26,6 +26,7 @@ import cartRoutes from "./routes/cart.route.js";
 import wishlistRoutes from "./routes/wishlist.route.js";
 import orderRoutes from "./routes/order.route.js";
 import paymentRoutes from "./routes/payment.route.js";
+import { swaggerUi, swaggerSpec } from "./swagger.js";
 
 app.use("/api/auth", authRoutes);
 app.use("/api/category", categoryRoutes);
@@ -43,6 +44,6 @@ app.get("/api", (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`🚀 Backend running at http://localhost:${PORT}`);
+  console.log(` Backend running at http://localhost:${PORT}`);
 });
 export default app;

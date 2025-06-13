@@ -1,28 +1,21 @@
 "use client";
-import { useEffect, useState } from "react";
+import Header from "../components/layout/header/header";
+import Footer from "../components/layout/Footer/footer";
+import Category from "../components/ui/Category/Category";
+import Banner from "../components/ui/Banner/Banner";
 
-export default function Home() {
-  const [message, setMessage] = useState("");
-
-  useEffect(async () => {
-    try {
-      const response = await fetch("http://localhost:5000/api/health");
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      } else {
-        const data = await response.json();
-        setMessage(data.status);
-      }
-    } catch (error) {
-      console.error("Error fetching data:", error);
-      setMessage("Failed to fetch data from the backend.");
-    }
-  }, []);
-
+export default function Homepage() {
   return (
-    <div>
-      <h1>Welcome to Weave 🧵</h1>
-      <p>{message}</p>
+    <div className="min-h-screen flex flex-col font-sans bg-white text-gray-900">
+      {/* HEADER */}
+      <Header />
+
+      {/* CATEGORY SECTION */}
+      <Category />
+      {/* BANNER */}
+      <Banner />
+      {/* FOOTER */}
+      <Footer />
     </div>
   );
 }

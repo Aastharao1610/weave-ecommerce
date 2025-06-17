@@ -31,11 +31,11 @@ const AdminCategories = () => {
   const handleFormSuccess = () => {
     setRefresh(!refresh);
     setShowModal(false);
-    setEditData(null); // reset edit mode
+    setEditData(null);
   };
 
   const handleEditClick = (category) => {
-    setEditData(category); // 👈 set form to edit this
+    setEditData(category);
     setShowModal(true);
   };
 

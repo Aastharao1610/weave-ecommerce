@@ -1,7 +1,7 @@
 "use client";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { Trash, Pencil } from "lucide-react";
+import { Trash2, Pencil } from "lucide-react";
 import { useState } from "react";
 import DeleteConfirmationModal from "../../modal/deleteModal";
 
@@ -44,13 +44,13 @@ const CategoryCard = ({ category, onDeleted, onEdit }) => {
             onClick={() => onEdit(category)}
             className="hover:text-blue-500 cursor-pointer"
           >
-            <Pencil />
+            <Pencil size={16} />
           </button>
           <button
             onClick={() => setIsModalOpen(true)}
             className="hover:text-red-500 hover:underline cursor-pointer"
           >
-            <Trash />
+            <Trash2 size={16} />
           </button>
         </div>
       </div>

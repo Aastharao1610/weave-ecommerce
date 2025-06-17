@@ -17,39 +17,6 @@ const CategoryForm = ({ onSuccess, editMode = false, initialData = {} }) => {
     setPreview(URL.createObjectURL(file));
   };
 
-  //   e.preventDefault();
-
-  //   if (!name || !description || !image) {
-  //     toast.error("All fields are required");
-  //     return;
-  //   }
-
-  //   const formData = new FormData();
-  //   formData.append("name", name);
-  //   formData.append("description", description);
-  //   formData.append("image", image); // req.file on server
-
-  //   try {
-  //     setLoading(true);
-  //     await axios.post("http://localhost:5000/api/category/create", formData, {
-  //       withCredentials: true,
-  //       headers: { "Content-Type": "multipart/form-data" },
-  //     });
-  //     toast.success("Category Created!");
-  //     setName("");
-  //     setDescription("");
-  //     setImage(null);
-  //     setPreview(null);
-  //     onSuccess();
-  //   } catch (err) {
-  //     toast.error("Creation failed");
-  //     console.error(err);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-  // const handleSubmit = async (e) => {
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 

@@ -11,8 +11,7 @@ const DeleteConfirmationModal = ({ isOpen, onClose, onConfirm }) => {
             Confirm Deletion
           </Dialog.Title>
           <Dialog.Description className="mt-2 text-gray-600">
-            Are you sure you want to delete this category? This action cannot be
-            undone.
+            Are you sure you want to delete this ? This action cannot be undone.
           </Dialog.Description>
           <div className="mt-4 flex justify-end gap-3">
             <button

@@ -11,7 +11,7 @@ import getCategory from "../controllers/categoryController/getController.control
 const router = express.Router();
 
 router.post("/create", verifyToken, upload.single("image"), createCategory);
-router.get("/", verifyToken, getCategory);
+router.get("/", getCategory);
 router.put("/update/:id", verifyToken, upload.single("image"), updateCategory);
 router.delete("/delete/:id", verifyToken, deleteCategory);
 

@@ -10,7 +10,7 @@ import getproduct from "../controllers/productController/getProduct.controller.j
 import deleteProduct from "../controllers/productController/deleteProduct.controllr.js";
 
 router.post("/create", verifyToken, upload.array("images"), createProduct);
-router.get("/", verifyToken, getproduct);
+router.get("/", getproduct);
 router.put("/update/:id", verifyToken, upload.array("images"), updateProduct);
 router.delete("/:id", verifyToken, deleteProduct);
 

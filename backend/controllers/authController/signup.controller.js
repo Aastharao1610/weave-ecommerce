@@ -1,76 +1,36 @@
 import prisma from "../../lib/db.js";
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
 import { sendVerificationEmail } from "../../lib/sendVerification.js";
+import { v4 as uuidv4 } from "uuid";
 
-const signup = async (req, res) => {
+export const signup = async (req, res) => {
   try {
-    const { email, password, name, phone } = req.body;
+    const { name, email, password } = req.body;
 
-    if (!email || !password || !name || !phone) {
-      return res.status(400).json({ error: "Missing required fields" });
-    }
-
-    const existingUser = await prisma.user.findUnique({
-      where: { email },
-    });
-
+    const existingUser = await prisma.user.findUnique({ where: { email } });
     if (existingUser) {
       return res.status(400).json({ error: "User already exists" });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
+    const token = uuidv4();
 
-    const newUser = await prisma.user.create({
+    await prisma.pendingUser.create({
       data: {
-        email,
-        password: hashedPassword,
         name,
-        phone,
-        role: "User",
-        verified: false,
+        email,
+        hashedPassword,
+        token,
+        expiresAt: new Date(Date.now() + 60 * 60 * 1000),
       },
     });
 
-    const accessToken = jwt.sign(
-      { userId: newUser.id, role: newUser.role },
-      process.env.JWT_SECRET,
-      { expiresIn: process.env.JWT_EXPIRES_IN }
-    );
+    // Just send the email — don't create the user again!
+    await sendVerificationEmail({ email, token });
 
-    const refreshToken = jwt.sign(
-      { userId: newUser.id, role: newUser.role },
-      process.env.REFRESH_SECRET,
-      { expiresIn: process.env.REFRESH_SECRET_EXPIRES }
-    );
-
-    await prisma.refreshToken.create({
-      data: {
-        token: refreshToken,
-        userId: newUser.id,
-        expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-      },
-    });
-
-    res.cookie("refreshToken", refreshToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "Strict",
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-    });
-
-    await sendVerificationEmail(newUser);
-
-    res.status(201).json({
-      message: "User created successfully",
-      userId: newUser.id,
-      accessToken,
-      refreshToken,
-    });
+    res.status(201).json({ message: "Verification email sent" });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Something went wrong" });
+    console.error("Signup Error:", error);
+    res.status(500).json({ error: "Internal server error" });
   }
 };
-
-export default signup;

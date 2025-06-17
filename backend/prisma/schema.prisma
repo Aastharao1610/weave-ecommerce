@@ -31,7 +31,7 @@ enum PaymentStatus {
 model User {
   id                     Int                      @id @default(autoincrement())
   email                  String?                  @unique
-  phone                  String?                  @unique
+  //  phone                  String?                  @unique
   name                   String?
   password               String?
   authProvider           String?
@@ -227,4 +227,14 @@ model RefreshToken {
   expiresAt DateTime
   ip        String?
   userAgent String?
+}
+
+model PendingUser {
+  id             String   @id @default(uuid())
+  email          String   @unique
+  name           String
+  // phone          String
+  hashedPassword String
+  token          String   @unique
+  expiresAt      DateTime
 }

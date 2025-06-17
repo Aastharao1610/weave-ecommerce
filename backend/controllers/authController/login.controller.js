@@ -1,3 +1,4 @@
+// backend/controllers/login.js
 import prisma from "../../lib/db.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
@@ -5,20 +6,14 @@ import jwt from "jsonwebtoken";
 const login = async (req, res) => {
   try {
     const { email, password } = req.body;
-    console.log("BODY:", req.body);
 
-    console.log(email, password);
-
-    const existingUser = await prisma.user.findUnique({
-      where: { email },
-    });
+    const existingUser = await prisma.user.findUnique({ where: { email } });
 
     if (!existingUser) {
-      return res
-        .status(404)
-        .json({ message: "User doesn't exist, please sign up" });
+      return res.status(404).json({ message: "User not found" });
     }
-    if (!existingUser.verified) {
+
+    if (existingUser.role !== "ADMIN" && !existingUser.verified) {
       return res
         .status(403)
         .json({ message: "Email not verified. Please check your inbox." });
@@ -28,7 +23,6 @@ const login = async (req, res) => {
       password,
       existingUser.password
     );
-
     if (!isPasswordValid) {
       return res.status(401).json({ message: "Incorrect password" });
     }
@@ -49,31 +43,29 @@ const login = async (req, res) => {
       data: {
         token: refreshToken,
         userId: existingUser.id,
-        expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days
+        expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
       },
     });
 
-    res.cookie("refreshToken", refreshToken, {
+    res.cookie("token", accessToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "Strict",
-      maxAge: 7 * 24 * 60 * 60 * 1000,
+      maxAge: 30 * 60 * 1000,
     });
 
     res.status(200).json({
       message: "Logged in successfully",
       accessToken,
-      refreshToken,
       user: {
         id: existingUser.id,
         email: existingUser.email,
-        name: existingUser.name,
         role: existingUser.role,
       },
     });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Something went wrong" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Login error" });
   }
 };
 

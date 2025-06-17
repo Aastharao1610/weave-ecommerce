@@ -2,8 +2,8 @@ import prisma from "../lib/db.js";
 import bcrypt from "bcrypt";
 
 async function seed() {
-  const adminEmail = process.env.adminEmail;
-  const password = process.env.password;
+  const adminEmail = process.env.ADMIN_EMAIL;
+  const password = process.env.ADMIN_PASSWORD;
   const name = process.env.name;
 
   const existingEmail = await prisma.user.findUnique({

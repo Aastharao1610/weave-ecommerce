@@ -1,10 +1,12 @@
 import express from "express";
 import login from "../controllers/authController/login.controller.js";
-import signup from "../controllers/authController/signup.controller.js";
+import { signup } from "../controllers/authController/signup.controller.js";
 import logout from "../controllers/authController/logout.controller.js";
 import verifyEmail from "../controllers/authController/verifyEmail.controller.js";
 import { verifyOtp } from "../controllers/authController/verifyOtp.Cotroller.js";
 import { sendOtp } from "../controllers/authController/sendOtp.controller.js";
+import { signupSchema } from "../utils/auth.validators.js";
+import { validate } from "../middleware/validateInput.js";
 
 const router = express.Router();
 
@@ -59,7 +61,7 @@ const router = express.Router();
  *       400:
  *         description: Missing fields or user already exists
  */
-router.post("/signup", signup);
+router.post("/signup", validate(signupSchema), signup);
 
 /**
  * @swagger

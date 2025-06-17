@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+import cookieParser from "cookie-parser";
 
 dotenv.config();
 const app = express();
@@ -13,7 +14,14 @@ app.post(
   webhookHandler
 );
 
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    credentials: true,
+  })
+);
+app.use(cookieParser());
+
 app.use(express.json());
 
 import authRoutes from "./routes/auth.route.js";
@@ -26,7 +34,9 @@ import cartRoutes from "./routes/cart.route.js";
 import wishlistRoutes from "./routes/wishlist.route.js";
 import orderRoutes from "./routes/order.route.js";
 import paymentRoutes from "./routes/payment.route.js";
+import productImages from "./routes/prductImage.route.js";
 import { swaggerUi, swaggerSpec } from "./swagger.js";
+import { errorHandler } from "./middleware/errorHandler.js";
 
 app.use("/api/auth", authRoutes);
 app.use("/api/category", categoryRoutes);
@@ -38,7 +48,8 @@ app.use("/api/cart", cartRoutes);
 app.use("/api/wishlist", wishlistRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/payments", paymentRoutes);
-
+app.use("/api/productImages", productImages);
+app.use(errorHandler);
 app.get("/api", (req, res) => {
   res.json({ status: "Backend is running!" });
 });

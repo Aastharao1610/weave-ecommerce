@@ -3,6 +3,7 @@ import Header from "../components/layout/header/header";
 import Footer from "../components/layout/Footer/footer";
 import Category from "../components/ui/Category/Category";
 import Banner from "../components/ui/Banner/Banner";
+import Products from "../components/card/prodcutCard";
 
 export default function Homepage() {
   return (
@@ -15,6 +16,7 @@ export default function Homepage() {
       {/* BANNER */}
       <Banner />
       {/* FOOTER */}
+      <Products />
       <Footer />
     </div>
   );

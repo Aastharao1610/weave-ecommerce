@@ -13,7 +13,7 @@ router.post(
   verifyToken,
   createProductVariant
 );
-router.get("/", verifyToken, getProductVariant);
+router.get("/", getProductVariant);
 router.put(
   "/update/:id",
   upload.array("image"),

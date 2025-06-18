@@ -1,46 +1,75 @@
 import { useRef } from "react";
 import SubcategoryCard from "../SubCateogryCard/SubCateogryCard";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import toast from "react-hot-toast";
+
+const CARD_WIDTH = 220;
+const VISIBLE_CARDS = 6;
+
 const SubcategorySlider = ({ subcategories = [], onEdit, onDeleted }) => {
   const scrollRef = useRef();
 
   const scroll = (direction) => {
     const container = scrollRef.current;
     if (container) {
+      const scrollAmount = CARD_WIDTH * VISIBLE_CARDS;
       container.scrollBy({
-        left: direction === "right" ? 300 : -300,
+        left: direction === "right" ? scrollAmount : -scrollAmount,
         behavior: "smooth",
       });
     }
   };
 
   return (
-    <div>
-      <div className="relative">
-        <div
-          ref={scrollRef}
-          className="flex gap-4 overflow-x-auto  p-2 scroll-smooth"
-        >
-          {subcategories.map((sub) => (
+    <div className="relative w-full py-6">
+      {/* Scrollable Card Container */}
+      <div
+        ref={scrollRef}
+        className="flex gap-4 overflow-x-auto scroll-smooth no-scrollbar "
+      >
+        {subcategories.map((sub) => (
+          <div
+            key={sub.id}
+            style={{
+              minWidth: `${CARD_WIDTH}px`,
+              flexShrink: 0,
+            }}
+          >
             <SubcategoryCard
-              key={sub.id}
               subcategory={sub}
               onEdit={onEdit}
               onDeleted={onDeleted}
             />
-          ))}
-        </div>
-        <div className="flex justify-between mt-2">
-          <button onClick={() => scroll("left")}>
-            <ChevronLeft />
-          </button>
-          <button onClick={() => scroll("right")}>
-            <ChevronRight />
-          </button>
-        </div>
+          </div>
+        ))}
       </div>
+
+      {/* Scroll Buttons */}
+      <button
+        onClick={() => scroll("left")}
+        className="absolute left-0 top-1/2 -translate-y-1/2 z-50 bg-white shadow-md rounded-full p-2 hover:bg-gray-100"
+      >
+        <ChevronLeft size={24} />
+      </button>
+
+      <button
+        onClick={() => scroll("right")}
+        className="absolute right-0 top-1/2 -translate-y-1/2 z-50 bg-pink-500 text-white shadow-md rounded-full p-2 hover:bg-pink-600"
+      >
+        <ChevronRight size={24} />
+      </button>
+
+      {/* Hide Scrollbar */}
+      <style jsx>{`
+        .no-scrollbar::-webkit-scrollbar {
+          display: none;
+        }
+        .no-scrollbar {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+      `}</style>
     </div>
   );
 };
+
 export default SubcategorySlider;

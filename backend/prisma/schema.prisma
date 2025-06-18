@@ -52,7 +52,7 @@ model EmailVerificationToken {
   id        Int      @id @default(autoincrement())
   token     String   @unique
   userId    Int
-  user      User     @relation(fields: [userId], references: [id])
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   expiresAt DateTime
 }
 
@@ -73,7 +73,7 @@ model Subcategory {
   id         Int       @id @default(autoincrement())
   name       String
   imageUrl   String?
-  category   Category  @relation(fields: [categoryId], references: [id])
+  category   Category  @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   categoryId Int
   products   Product[]
 }
@@ -82,7 +82,7 @@ model ProductImage {
   id        Int     @id @default(autoincrement())
   url       String
   altText   String?
-  product   Product @relation(fields: [productId], references: [id])
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
   productId Int
 }
 
@@ -96,13 +96,13 @@ model Product {
   variant       ProductVariant[]
   reviews       Review[]
   images        ProductImage[]
-  Subcategory   Subcategory?     @relation(fields: [subcategoryId], references: [id])
+  Subcategory   Subcategory?     @relation(fields: [subcategoryId], references: [id], onDelete: Cascade)
   subcategoryId Int?
 }
 
 model ProductVariant {
   id            Int            @id @default(autoincrement())
-  product       Product        @relation(fields: [productId], references: [id])
+  product       Product        @relation(fields: [productId], references: [id], onDelete: Cascade)
   productId     Int
   color         String
   size          String
@@ -118,9 +118,9 @@ model ProductVariant {
 
 model Review {
   id        Int      @id @default(autoincrement())
-  user      User     @relation(fields: [userId], references: [id])
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    Int
-  product   Product  @relation(fields: [productId], references: [id])
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
   productId Int
   rating    Int
   comment   String?
@@ -130,7 +130,7 @@ model Review {
 
 model Cart {
   id        Int        @id @default(autoincrement())
-  user      User       @relation(fields: [userId], references: [id])
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    Int        @unique
   items     CartItem[]
   updatedAt DateTime   @updatedAt
@@ -138,9 +138,9 @@ model Cart {
 
 model CartItem {
   id               Int            @id @default(autoincrement())
-  cart             Cart           @relation(fields: [cartId], references: [id])
+  cart             Cart           @relation(fields: [cartId], references: [id], onDelete: Cascade)
   cartId           Int
-  productVariant   ProductVariant @relation(fields: [productVariantId], references: [id])
+  productVariant   ProductVariant @relation(fields: [productVariantId], references: [id], onDelete: Cascade)
   productVariantId Int
 
   quantity Int      @default(1)
@@ -149,7 +149,7 @@ model CartItem {
 
 model Wishlist {
   id        Int            @id @default(autoincrement())
-  user      User           @relation(fields: [userId], references: [id])
+  user      User           @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    Int            @unique
   items     WishlistItem[]
   updatedAt DateTime       @updatedAt
@@ -157,9 +157,9 @@ model Wishlist {
 
 model WishlistItem {
   id               Int            @id @default(autoincrement())
-  wishlist         Wishlist       @relation(fields: [wishlistId], references: [id])
+  wishlist         Wishlist       @relation(fields: [wishlistId], references: [id], onDelete: Cascade)
   wishlistId       Int
-  productVariant   ProductVariant @relation(fields: [productVariantId], references: [id])
+  productVariant   ProductVariant @relation(fields: [productVariantId], references: [id], onDelete: Cascade)
   productVariantId Int
   quantity         Int            @default(1)
   addedAt          DateTime       @default(now())
@@ -167,7 +167,7 @@ model WishlistItem {
 
 model Order {
   id        Int         @id @default(autoincrement())
-  user      User        @relation(fields: [userId], references: [id])
+  user      User        @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    Int
   status    OrderStatus @default(PENDING)
   createdAt DateTime    @default(now())
@@ -195,9 +195,9 @@ model Order {
 
 model OrderItem {
   id               Int            @id @default(autoincrement())
-  order            Order          @relation(fields: [orderId], references: [id])
+  order            Order          @relation(fields: [orderId], references: [id], onDelete: Cascade)
   orderId          Int
-  productVariant   ProductVariant @relation(fields: [productVariantId], references: [id])
+  productVariant   ProductVariant @relation(fields: [productVariantId], references: [id], onDelete: Cascade)
   productVariantId Int
   quantity         Int
   priceAtPurchase  Float
@@ -205,7 +205,7 @@ model OrderItem {
 
 model Payment {
   id            Int           @id @default(autoincrement())
-  order         Order         @relation(fields: [orderId], references: [id])
+  order         Order         @relation(fields: [orderId], references: [id], onDelete: Cascade)
   orderId       Int           @unique
   paymentMethod String
   amount        Float
@@ -214,14 +214,14 @@ model Payment {
   paidAt        DateTime?
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
-  User          User?         @relation(fields: [userId], references: [id])
+  User          User?         @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId        Int?
 }
 
 model RefreshToken {
   id        Int      @id @default(autoincrement())
   token     String   @unique
-  user      User     @relation(fields: [userId], references: [id])
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    Int
   createdAt DateTime @default(now())
   expiresAt DateTime

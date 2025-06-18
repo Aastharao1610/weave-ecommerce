@@ -7,6 +7,9 @@ import { verifyOtp } from "../controllers/authController/verifyOtp.Cotroller.js"
 import { sendOtp } from "../controllers/authController/sendOtp.controller.js";
 import { signupSchema } from "../utils/auth.validators.js";
 import { validate } from "../middleware/validateInput.js";
+import getUsers from "../controllers/authController/getUser.controller.js";
+import deleteUser from "../controllers/authController/deleteUser.controller.js";
+import { verifyToken } from "../middleware/auth.js";
 
 const router = express.Router();
 
@@ -194,5 +197,7 @@ router.post("/verify-otp", verifyOtp);
  *         description: Failed to send OTP
  */
 router.post("/send-Otp", sendOtp);
+router.get("/", getUsers);
+router.delete("/user/:id", verifyToken, deleteUser);
 
 export default router;

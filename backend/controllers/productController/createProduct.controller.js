@@ -6,6 +6,8 @@ const createProduct = async (req, res) => {
   try {
     const { name, description, baseprice, variant, subcategoryId } = req.body;
     console.log("BODY:", req.body);
+    console.log("subcategoryId type:", typeof req.body.subcategoryId);
+    console.log("FILES:", req.files);
 
     let parsedVariants = [];
     if (variant) {
@@ -33,11 +35,15 @@ const createProduct = async (req, res) => {
       })
     );
     console.log("FILES:", req.files || req.file);
+    if (!subcategoryId) {
+      return res.status(400).json({ error: "Subcategory ID is required" });
+    }
     const subCategory = await prisma.subcategory.findUnique({
       where: {
         id: parseInt(subcategoryId),
       },
     });
+
     if (subCategory) {
       const newProduct = await prisma.product.create({
         data: {

@@ -18,21 +18,28 @@ const AdminDashboard = () => {
       try {
         const baseURL = "http://localhost:5000/api";
 
-        const [productsRes, categoriesRes, subcategoriesRes] =
+        const [productsRes, categoriesRes, subcategoriesRes, users, orders] =
           await Promise.all([
             axios.get(`${baseURL}/products/`, { withCredentials: true }),
             axios.get(`${baseURL}/category/`, { withCredentials: true }),
             axios.get(`${baseURL}/subCategory/`, { withCredentials: true }),
+            axios.get(`${baseURL}/auth`, { withCredentials: true }),
+            axios.get(`${baseURL}/orders`, { withCredentials: true }),
           ]);
 
         console.log("productsRes:", productsRes);
         console.log("categoriesRes:", categoriesRes);
         console.log("subcategoriesRes:", subcategoriesRes);
+        console.log("users", users);
+        console.log("orders", orders.data);
+        console.log(users.data);
 
         setStats({
           products: productsRes.data.product.length || 0,
           categories: categoriesRes.data.category.length || 0,
           subcategories: subcategoriesRes.data.subcategory.length || 0,
+          users: users.data.length || 0,
+          orders: orders.data.orders.length || 0,
         });
       } catch (err) {
         console.error("Error loading admin dashboard data", err);
@@ -45,9 +52,9 @@ const AdminDashboard = () => {
   return (
     <div className="p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6 my-5 ">
       <AdminCard title="Total Products" value={stats.products} icon={Package} />
-      <AdminCard title="Total Users" value={52} icon={Users} />
+      <AdminCard title="Total Users" value={stats.users} icon={Users} />
       <AdminCard title="Categories" value={stats.categories} icon={Boxes} />
-      <AdminCard title="Orders" value={12} icon={ShoppingCart} />
+      <AdminCard title="Orders" value={stats.orders} icon={ShoppingCart} />
       <AdminCard
         title="Subcategories"
         value={stats.subcategories}

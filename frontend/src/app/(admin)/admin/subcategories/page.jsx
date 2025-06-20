@@ -49,8 +49,9 @@ export default function SubcategoryPage() {
       </div>
 
       {category.map((cat) => (
-        <div key={cat.id} className="mb-6 text-black">
+        <div key={cat.id} className="mb-6 text-black ">
           <h3 className="text-lg font-semibold mb-2">{cat.name}</h3>
+
           <SubcategorySlider
             subcategories={cat.Subcategory}
             onEdit={handleEditClick}

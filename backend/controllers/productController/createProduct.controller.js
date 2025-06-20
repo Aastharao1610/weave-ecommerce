@@ -72,6 +72,7 @@ const createProduct = async (req, res) => {
         },
         include: {
           variant: true,
+          images: true,
         },
       });
       if (newProduct) {

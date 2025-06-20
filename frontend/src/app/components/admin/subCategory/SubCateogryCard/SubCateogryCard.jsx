@@ -27,7 +27,7 @@ const SubcategoryCard = ({ subcategory, onEdit, onDeleted }) => {
     }
   };
   return (
-    <div className="min-w-[180px] bg-white border border-gray-200 rounded p-3 shadow-sm flex flex-col justify-between">
+    <div className="min-w-[180px] bg-white border border-gray-200 rounded p-3 shadow-sm flex flex-col justify-between ">
       <img
         src={subcategory.imageUrl}
         alt={subcategory.name}

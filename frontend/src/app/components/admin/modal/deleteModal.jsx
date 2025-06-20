@@ -2,7 +2,13 @@
 import { Dialog } from "@headlessui/react";
 import { Fragment } from "react";
 
-const DeleteConfirmationModal = ({ isOpen, onClose, onConfirm }) => {
+const DeleteConfirmationModal = ({
+  title,
+  message,
+  isOpen,
+  onClose,
+  onConfirm,
+}) => {
   return (
     <Dialog open={isOpen} onClose={onClose} as={Fragment}>
       <div className="fixed inset-0 bg-tranparent backdrop-blur-xs bg-opacity-25 flex justify-center items-center z-50">
@@ -11,7 +17,7 @@ const DeleteConfirmationModal = ({ isOpen, onClose, onConfirm }) => {
             Confirm Deletion
           </Dialog.Title>
           <Dialog.Description className="mt-2 text-gray-600">
-            Are you sure you want to delete this ? This action cannot be undone.
+            {title || "Are you sure you want to delete this item?"}
           </Dialog.Description>
           <div className="mt-4 flex justify-end gap-3">
             <button

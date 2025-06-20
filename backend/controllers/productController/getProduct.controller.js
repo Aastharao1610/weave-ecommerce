@@ -4,6 +4,7 @@ const getproduct = async (req, res) => {
     const getproduct = await prisma.product.findMany({
       include: {
         variant: true,
+        images: true,
       },
     });
     if (getproduct) {

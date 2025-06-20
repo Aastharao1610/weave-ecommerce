@@ -45,7 +45,9 @@ const Category = () => {
                   className="object-cover w-full h-full"
                 />
               </div>
-              <p className="text-md font-medium capitalize">{cat.name}</p>
+              <p className="text-md text-black font-medium capitalize">
+                {cat.name}
+              </p>
             </div>
           ))}
         </div>

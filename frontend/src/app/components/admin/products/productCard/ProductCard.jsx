@@ -37,7 +37,6 @@ export default function ProductCard({ product, onEdit, onDeleted }) {
         )}
       </div>
 
-      {/* Content */}
       <div className="p-4 flex flex-col gap-2 text-sm text-gray-800">
         <div className="flex justify-between items-start">
           <h3 className="text-lg font-semibold text-black">{product.name}</h3>
@@ -50,7 +49,6 @@ export default function ProductCard({ product, onEdit, onDeleted }) {
           {product.description}
         </p>
 
-        {/* Variants */}
         {product.variant?.length > 0 && (
           <div className="bg-gray-50 p-2 rounded-md border text-xs mt-2 space-y-1">
             {product.variant.map((v, idx) => (
@@ -70,7 +68,6 @@ export default function ProductCard({ product, onEdit, onDeleted }) {
         )}
       </div>
 
-      {/* Actions */}
       <div className="border-t px-4 py-3 flex justify-end items-center gap-4">
         <button
           onClick={() => onEdit(product)}
@@ -88,8 +85,7 @@ export default function ProductCard({ product, onEdit, onDeleted }) {
 
       {isModalOpen && (
         <DeleteConfirmationModal
-          title="Delete Product"
-          message={`Are you sure you want to delete "${product.name}"?`}
+          title={`Are you sure you want to delete "${product.name}"?`}
           onClose={() => setIsModalOpen(false)}
           onConfirm={handleDelete}
           isOpen={isModalOpen}

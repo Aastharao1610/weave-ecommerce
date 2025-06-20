@@ -52,7 +52,9 @@ const Products = () => {
 
   return (
     <section className="py-16 px-8">
-      <h2 className="text-3xl font-semibold mb-10 text-center">Top Picks</h2>
+      <h2 className="text-3xl text-black font-semibold mb-10 text-center">
+        Top Picks
+      </h2>
       <div className="grid  grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
         {products.map((product) => {
           const image = images.find((img) => img.productId === product.id);
@@ -76,7 +78,9 @@ const Products = () => {
                 )}
               </div>
               <div className="p-4">
-                <h3 className="text-lg font-medium">{product.name}</h3>
+                <h3 className="text-lg text-black font-medium">
+                  {product.name}
+                </h3>
                 {/* <p className="text-sm text-gray-600 mt-1">
                     {product.description}
                   </p> */}

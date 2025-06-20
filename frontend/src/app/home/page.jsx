@@ -7,15 +7,13 @@ import Products from "../components/card/prodcutCard";
 
 export default function Homepage() {
   return (
-    <div className="min-h-screen flex flex-col font-sans bg-white text-gray-900">
-      {/* HEADER */}
+    <div className="min-h-screen flex flex-col font-sans bg-white ">
       <Header />
 
-      {/* CATEGORY SECTION */}
       <Category />
-      {/* BANNER */}
+
       <Banner />
-      {/* FOOTER */}
+
       <Products />
       <Footer />
     </div>

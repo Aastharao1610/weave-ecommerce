@@ -16,6 +16,7 @@ const DeleteConfirmationModal = ({
           <Dialog.Title className="text-lg font-semibold text-gray-800">
             Confirm Deletion
           </Dialog.Title>
+
           <Dialog.Description className="mt-2 text-gray-600">
             {title || "Are you sure you want to delete this item?"}
           </Dialog.Description>

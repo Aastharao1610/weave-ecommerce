@@ -19,6 +19,12 @@ export const verifyToken = (req, res, next) => {
     };
     next();
   } catch (error) {
+    if (error.name === "TokenExpiredError") {
+      return res
+        .status(401)
+        .json({ message: "Session expired. Please login again." });
+    }
+
     return res.status(403).json({ message: "Forbidden - Invalid token" });
   }
 };

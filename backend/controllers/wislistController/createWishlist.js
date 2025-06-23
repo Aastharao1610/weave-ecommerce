@@ -3,12 +3,21 @@ import prisma from "../../lib/db.js";
 const createWishlist = async (req, res) => {
   const userId = req.user.userId;
   const { productVariantId, quantity } = req.body;
-
+  if (!productVariantId) {
+    return res.status(400).json({ error: "Missing productVariantId" });
+  }
   try {
     let wishlist = await prisma.wishlist.findUnique({ where: { userId } });
 
     if (!wishlist) {
       wishlist = await prisma.wishlist.create({ data: { userId } });
+    }
+    const variantExists = await prisma.productVariant.findUnique({
+      where: { id: productVariantId },
+    });
+
+    if (!variantExists) {
+      return res.status(404).json({ error: "Product variant not found" });
     }
 
     const existingItem = await prisma.wishlistItem.findFirst({

@@ -3,7 +3,7 @@ import { Pencil, Trash2 } from "lucide-react";
 import { useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
-import DeleteConfirmationModal from "../../modal/deleteModal";
+import DeleteConfirmationModal from "../../../modal/Modal";
 
 export default function ProductCard({ product, onEdit, onDeleted }) {
   const [isModalOpen, setIsModalOpen] = useState(false);

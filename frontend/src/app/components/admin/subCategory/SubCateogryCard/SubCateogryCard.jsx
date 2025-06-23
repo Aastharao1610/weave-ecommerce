@@ -1,7 +1,7 @@
 "use client";
 import { Pencil, Trash2 } from "lucide-react";
 import { useState } from "react";
-import DeleteConfirmationModal from "../../modal/deleteModal";
+import DeleteConfirmationModal from "../../../modal/Modal";
 import toast from "react-hot-toast";
 import axios from "axios";
 

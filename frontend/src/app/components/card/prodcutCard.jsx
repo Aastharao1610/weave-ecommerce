@@ -1,99 +1,313 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import { ShoppingCart } from "lucide-react";
 import Image from "next/image";
+import { useState, useEffect } from "react";
+import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
+import Cookies from "js-cookie";
+import clsx from "clsx";
 import axios from "axios";
+import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 
-const Products = () => {
-  const [products, setProducts] = useState([]);
-  const [images, setImages] = useState([]);
+const ProductCard = ({ product }) => {
+  const router = useRouter();
 
-  const fetchProducts = async () => {
-    try {
-      const res = await axios.get("http://localhost:5000/api/products");
-      console.log(res);
-      console.log(res.data);
-      console.log(res.data.product);
-      const allProducts = res.data.product || [];
-      setProducts(allProducts.slice(0, 5));
-    } catch (err) {
-      console.error("Failed to fetch products:", err);
-    }
-  };
+  const [currentImgIndex, setCurrentImgIndex] = useState(0);
+  const [inWishlist, setInWishlist] = useState(false);
 
-  //   const productImage = async () => {
-  //     try {
-  //       const responseImage = await axios.get(
-  //         "http://localhost:5000/api/productImages"
-  //       );
-  //       console.log(responseImage, "responseImage");
-  //       console.log(responseImage.productId.url, "product Url");
-  //       const allImages = responseImage.data.url || [];
-  //       setImages(allImages.slice(0, 5));
-  //     } catch (error) {
-  //       console.error("Failed to fetch Images", error);
-  //     }
-  //   };
-
-  const fetchImages = async () => {
-    try {
-      const res = await axios.get("http://localhost:5000/api/productImages");
-      const allImages = res.data || [];
-      setImages(allImages);
-    } catch (err) {
-      console.error("Failed to fetch images:", err);
-    }
-  };
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-    fetchProducts();
-    fetchImages();
+    const checkAuth = async () => {
+      try {
+        const res = await axios.get("http://localhost:5000/api/auth/me", {
+          withCredentials: true,
+        });
+        setIsLoggedIn(true);
+        console.log(" User is logged in:", res.data.user);
+      } catch (error) {
+        console.log("User not logged in");
+        setIsLoggedIn(false);
+      }
+    };
+
+    checkAuth();
   }, []);
 
+  useEffect(() => {
+    console.log("useEffect triggered");
+
+    const checkWishlist = async () => {
+      console.log("🔍 Running checkWishlist");
+
+      if (!isLoggedIn) {
+        console.log("Not logged in");
+        // router.push("/login");
+        return;
+      }
+      console.log("🧾 Product", product);
+
+      console.log("Logged in. Checking wishlist for product:", product.id);
+
+      try {
+        const res = await axios.get("http://localhost:5000/api/wishlist/", {
+          withCredentials: true,
+        });
+        console.log("Wishlist response:", res.data);
+
+        const wishlisted = res.data?.wishlist?.items?.some(
+          (item) => item.productVariant?.productId === product.id
+        );
+
+        console.log("Is in wishlist?", wishlisted);
+        setInWishlist(wishlisted);
+      } catch (error) {
+        console.error("Error checking wishlist:", error);
+      }
+    };
+
+    checkWishlist();
+  }, [isLoggedIn, product.id]);
+
+  const handleAddToCart = async () => {
+    if (!isLoggedIn) {
+      toast.error("Please login to add to cart");
+      router.push("/login");
+    }
+
+    try {
+      await axios.post(
+        "http://localhost:5000/api/cart/create",
+        {
+          productVariantId: product.id,
+          quantity: 1,
+        },
+        { withCredentials: true }
+      );
+      toast.success("Product added to cart");
+    } catch (error) {
+      toast.error("Failed to add to cart");
+      console.error(error);
+    }
+  };
+
+  const handleToggleWishlist = async () => {
+    const variantId = product.variant?.[0]?.id;
+    if (!variantId) return;
+
+    console.log("🖱️ Wishlist toggle clicked");
+
+    if (!isLoggedIn) {
+      toast.error("Please login to manage wishlist");
+      router.push("/login");
+      return;
+    }
+
+    try {
+      // ✅ Always fetch latest wishlist
+      const res = await axios.get("http://localhost:5000/api/wishlist", {
+        withCredentials: true,
+      });
+
+      const wishlistItems = res.data?.wishlist?.items || [];
+
+      // ✅ Find item with current variantId
+      const matchedItem = wishlistItems.find(
+        (item) => item.productVariant?.id === variantId
+      );
+
+      if (matchedItem) {
+        // ✅ Now delete the latest matching item
+        console.log("🆔 Deleting item with ID:", matchedItem.id);
+        await axios.delete(
+          `http://localhost:5000/api/wishlist/delete/${matchedItem.id}`,
+          {
+            withCredentials: true,
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        toast.success("Removed from wishlist");
+        setInWishlist(false);
+      } else {
+        // ✅ Add fresh
+        console.log("➕ Adding item to wishlist");
+        await axios.post(
+          "http://localhost:5000/api/wishlist/create",
+          {
+            productVariantId: variantId,
+            quantity: 1,
+          },
+          {
+            withCredentials: true,
+          }
+        );
+        toast.success("Added to wishlist");
+        setInWishlist(true);
+      }
+    } catch (err) {
+      console.error("❌ Wishlist update error:", err);
+      toast.error("Wishlist update failed");
+    }
+  };
+
+  // const handleToggleWishlist = async () => {
+  //   console.log("🖱️ Wishlist toggle clicked");
+
+  //   if (!isLoggedIn) {
+  //     toast.error("Please login to manage wishlist");
+  //     router.push("/login");
+  //     return;
+  //   }
+
+  //   const variantId = product.variant?.[0]?.id;
+  //   if (!variantId) {
+  //     toast.error("No product variant found");
+  //     return;
+  //   }
+
+  //   try {
+  //     // Always fetch latest wishlist to get latest item.id
+  //     const res = await axios.get("http://localhost:5000/api/wishlist", {
+  //       withCredentials: true,
+  //     });
+
+  //     const item = res.data?.wishlist?.items?.find(
+  //       (item) => item.productVariantId === variantId
+  //     );
+
+  //     if (item) {
+  //       console.log("🆔 Deleting item with ID:", item.id);
+
+  //       await axios.delete(
+  //         `http://localhost:5000/api/wishlist/delete/${item.id}`,
+  //         { withCredentials: true }
+  //       );
+
+  //       toast.success("Removed from wishlist");
+  //       setInWishlist(false);
+  //     } else {
+  //       await axios.post(
+  //         "http://localhost:5000/api/wishlist/create",
+  //         { productVariantId: variantId, quantity: 1 },
+  //         { withCredentials: true }
+  //       );
+
+  //       toast.success("Added to wishlist");
+  //       setInWishlist(true);
+  //     }
+  //   } catch (err) {
+  //     console.error("❌ Wishlist update error:", err);
+  //     toast.error("Wishlist update failed");
+  //   }
+  // };
+
+  const imageUrl = product.images?.[0]?.url;
   return (
-    <section className="py-16 px-8">
-      <h2 className="text-3xl text-black font-semibold mb-10 text-center">
-        Top Picks
-      </h2>
-      <div className="grid  grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
-        {products.map((product) => {
-          const image = images.find((img) => img.productId === product.id);
-          return (
-            <div
-              key={product.id}
-              className="bg-white shadow-lg rounded-lg overflow-hidden hover:shadow-xl transition-shadow duration-300"
-            >
-              <div className="relative w-full h-60">
-                {image ? (
-                  <Image
-                    src={image.url}
-                    alt={image.altText?.trim() || product.name}
-                    layout="fill"
-                    objectFit="cover"
-                  />
-                ) : (
-                  <div className="w-full h-full bg-gray-200 flex items-center justify-center">
-                    <span className="text-gray-500">No Image</span>
-                  </div>
-                )}
-              </div>
-              <div className="p-4">
-                <h3 className="text-lg text-black font-medium">
-                  {product.name}
-                </h3>
-                {/* <p className="text-sm text-gray-600 mt-1">
-                    {product.description}
-                  </p> */}
-                <p className="text-md font-semibold text-black mt-2">
-                  ₹{product.basePrice}
-                </p>
-              </div>
-            </div>
-          );
-        })}
+    <div className="relative bg-white shadow-md rounded-lg overflow-hidden group transition-all duration-300 hover:shadow-lg">
+      {/* Image & Wishlist */}
+      <div
+        className="relative w-full h-60 cursor-pointer"
+        onClick={() => router.push(`/product/${product.id}`)}
+      >
+        {/* Wishlist Icon */}
+        <div className="absolute top-2 right-2 z-10 bg-white p-1 rounded-full shadow">
+          {inWishlist ? (
+            <AiFillHeart
+              size={20}
+              className="text-red-500 cursor-pointer"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleToggleWishlist();
+              }}
+            />
+          ) : (
+            <AiOutlineHeart
+              size={20}
+              className="text-black cursor-pointer hover:text-red-500"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleToggleWishlist();
+              }}
+            />
+          )}
+        </div>
+        {/* <button onClick={handleToggleWishlist}>Test Toggle</button> */}
+
+        {/* Product Image Carousel */}
+        {/* {imagesToShow.length > 0 ? (
+          <Image
+            src={imagesToShow[currentImgIndex]?.url}
+            alt={imagesToShow[currentImgIndex]?.altText || product.name}
+            fill
+            className="object-cover transition-transform duration-300 group-hover:scale-105"
+          />
+        ) : (
+          <div className="w-full h-full bg-gray-200 flex items-center justify-center text-gray-500">
+            No Image
+          </div>
+        )} */}
+        {imageUrl ? (
+          <Image
+            src={imageUrl}
+            alt={product.name}
+            fill
+            className="object-cover transition-transform duration-300 group-hover:scale-105"
+          />
+        ) : (
+          <div className="w-full h-full bg-gray-200 flex items-center justify-center text-gray-500">
+            No Image
+          </div>
+        )}
       </div>
-    </section>
+
+      {/* Dots for image carousel */}
+      {/* {imagesToShow.length > 1 && (
+        <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex gap-1 z-10">
+          {imagesToShow.map((_, index) => (
+            <div
+              key={index}
+              onClick={(e) => {
+                e.stopPropagation();
+                handleDotClick(index);
+              }}
+              className={clsx(
+                "h-2 w-2 rounded-full bg-white border border-gray-300 cursor-pointer",
+                {
+                  "bg-black": currentImgIndex === index,
+                }
+              )}
+            ></div>
+          ))}
+        </div>
+      )} */}
+
+      {/* Product Info */}
+      <div className="p-4 space-y-2">
+        <h3 className="text-base font-semibold text-black">
+          {product.name || "Unnamed"}
+        </h3>
+        <p className="text-gray-500 text-sm truncate">
+          {product.description || "No description"}
+        </p>
+        <p className="text-black font-bold text-md">
+          ₹{product.basePrice || "0"}
+        </p>
+
+        {/* Add to Cart on hover */}
+        <div className="mt-2 absolute top-[200px] w-full mx-0 left-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          <button
+            onClick={handleAddToCart}
+            className="w-full text-black border bg-white border-gray-100 py-2 text-sm font-medium"
+          >
+            Add to Cart
+          </button>
+        </div>
+      </div>
+    </div>
   );
 };
 
-export default Products;
+export default ProductCard;

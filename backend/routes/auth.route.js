@@ -200,4 +200,30 @@ router.post("/send-Otp", sendOtp);
 router.get("/", getUsers);
 router.delete("/user/:id", verifyToken, deleteUser);
 
+router.post("/send-Otp", sendOtp);
+router.get("/", getUsers);
+router.delete("/user/:id", verifyToken, deleteUser);
+
+import prisma from "../lib/db.js";
+router.get("/me", verifyToken, async (req, res) => {
+  try {
+    const user = await prisma.user.findUnique({
+      where: { id: req.user.userId },
+      select: {
+        id: true,
+        email: true,
+        role: true,
+        name: true,
+      },
+    });
+
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    res.json({ user });
+  } catch (err) {
+    console.error("Failed to fetch user:", err);
+    res.status(500).json({ message: "Something went wrong" });
+  }
+});
+
 export default router;

@@ -3,7 +3,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { Trash2, Pencil } from "lucide-react";
 import { useState } from "react";
-import DeleteConfirmationModal from "../../modal/deleteModal";
+import DeleteConfirmationModal from "../../../modal/Modal";
 
 const CategoryCard = ({ category, onDeleted, onEdit }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);

@@ -3,7 +3,7 @@ import axios from "axios";
 import { Trash2 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import DeleteConfirmationModal from "@/app/components/admin/modal/deleteModal";
+import DeleteConfirmationModal from "@/app/components/modal/Modal";
 
 const Users = () => {
   const [users, setUsers] = useState([]);

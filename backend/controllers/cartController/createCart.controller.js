@@ -45,6 +45,11 @@ const createCart = async (req, res) => {
           // priceAtPurchase: variant.price,
         },
       });
+      console.log("➡️ Adding to cart", {
+        userId,
+        productVariantId,
+        quantity,
+      });
     }
     res.status(200).json({ message: "Item Added to cart" });
   } catch (error) {

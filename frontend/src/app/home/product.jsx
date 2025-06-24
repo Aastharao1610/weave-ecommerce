@@ -14,7 +14,7 @@ const Products = () => {
       try {
         const res = await axios.get("http://localhost:5000/api/products");
         const productList = res.data.product || [];
-        setProducts(productList.slice(0, 5)); // ✅ only take first 5
+        setProducts(productList.slice(0, 5));
       } catch (err) {
         console.error("Failed to fetch products:", err);
       }

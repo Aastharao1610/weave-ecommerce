@@ -10,7 +10,7 @@ import getcartItem from "../controllers/cartController/getCart.cotroller.js";
 
 router.post("/create", verifyToken, createCart);
 router.get("/", verifyToken, getcartItem);
-router.get("/update/:id", verifyToken, updateCartItem);
+router.put("/update/:id", verifyToken, updateCartItem);
 router.delete("/delete/:id", verifyToken, deleteCart);
 
 export default router;

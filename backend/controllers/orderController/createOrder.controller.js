@@ -103,6 +103,7 @@ const createOrder = async (req, res) => {
           status: "PROCESSING",
           total,
           ...shippingBillingInfo,
+
           items: {
             create: selectedCartItems.map((item) => ({
               productVariantId: item.productVariantId,
@@ -127,14 +128,14 @@ const createOrder = async (req, res) => {
       );
 
       // 10. Remove only ordered items from cart
-      await tx.cartItem.deleteMany({
-        where: {
-          cartId: cart.id,
-          productVariantId: {
-            in: selectedCartItems.map((item) => item.productVariantId),
-          },
-        },
-      });
+      // await tx.cartItem.deleteMany({
+      //   where: {
+      //     cartId: cart.id,
+      //     productVariantId: {
+      //       in: selectedCartItems.map((item) => item.productVariantId),
+      //     },
+      //   },
+      // });
 
       return order;
     });

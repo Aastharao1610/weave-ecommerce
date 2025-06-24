@@ -50,6 +50,10 @@ app.use("/api/orders", orderRoutes);
 app.use("/api/payments", paymentRoutes);
 app.use("/api/productImages", productImages);
 app.use(errorHandler);
+
+import userRoutes from "./routes/user.route.js";
+app.use("/api/user", userRoutes);
+
 app.get("/api", (req, res) => {
   res.json({ status: "Backend is running!" });
 });

@@ -12,7 +12,11 @@ const getcartItem = async (req, res) => {
           include: {
             productVariant: {
               include: {
-                product: true,
+                product: {
+                  include: {
+                    images: true,
+                  },
+                },
               },
             },
           },

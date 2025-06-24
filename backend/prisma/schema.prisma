@@ -46,6 +46,7 @@ model User {
   payments               Payment[]
   RefreshToken           RefreshToken[]
   EmailVerificationToken EmailVerificationToken[]
+  UserAddress            UserAddress?
 }
 
 model EmailVerificationToken {
@@ -183,14 +184,29 @@ model Order {
   shippingPostalCode String
   shippingCountry    String
 
-  billingStreet     String
-  billingCity       String
-  billingState      String
-  billingPostalCode String
-  billingCountry    String
+  billingStreet     String?
+  billingCity       String?
+  billingState      String?
+  billingPostalCode String?
+  billingCountry    String?
 
   items   OrderItem[]
   payment Payment?
+}
+
+model UserAddress {
+  id                 Int      @id @default(autoincrement())
+  user               User     @relation(fields: [userId], references: [id])
+  userId             Int      @unique
+  shippingName       String
+  shippingPhone      String
+  shippingStreet     String
+  shippingCity       String
+  shippingState      String
+  shippingPostalCode String
+  shippingCountry    String
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
 }
 
 model OrderItem {

@@ -4,9 +4,12 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { Trash2 } from "lucide-react";
+import Link from "next/link";
 
 const CartPage = () => {
   const [cartItems, setCartItems] = useState([]);
+  const [selectedItems, setSelectedItems] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const fetchCart = async () => {
@@ -14,7 +17,17 @@ const CartPage = () => {
       const res = await axios.get("http://localhost:5000/api/cart", {
         withCredentials: true,
       });
-      setCartItems(res.data.cart.items || []);
+      const newItems = res.data.cart.items || [];
+
+      const allItemIds = newItems.map((item) => item.id);
+
+      // ✅ preserve old selection + select any new ones
+      const updatedSelected = Array.from(
+        new Set([...selectedItems, ...allItemIds])
+      );
+
+      setCartItems(newItems);
+      setSelectedItems(updatedSelected);
     } catch (err) {
       console.error("Error fetching cart:", err);
       toast.error("Failed to load cart");
@@ -36,14 +49,40 @@ const CartPage = () => {
     }
   };
 
-  useEffect(() => {
-    fetchCart();
-  }, []);
+  const handleQuantityChange = async (productVariantId, newQuantity) => {
+    try {
+      await axios.put(
+        `http://localhost:5000/api/cart/update/${productVariantId}`,
+        { quantity: newQuantity },
+        { withCredentials: true }
+      );
+      fetchCart();
+    } catch (err) {
+      console.error("Quantity update failed:", err);
+      toast.error("Failed to update quantity");
+    }
+  };
 
-  const total = cartItems.reduce(
+  const toggleSelectItem = (itemId) => {
+    setSelectedItems((prev) =>
+      prev.includes(itemId)
+        ? prev.filter((id) => id !== itemId)
+        : [...prev, itemId]
+    );
+  };
+
+  const selectedCartItems = cartItems.filter((item) =>
+    selectedItems.includes(item.id)
+  );
+
+  const total = selectedCartItems.reduce(
     (acc, item) => acc + item.productVariant.price * item.quantity,
     0
   );
+
+  useEffect(() => {
+    fetchCart();
+  }, []);
 
   if (loading) {
     return (
@@ -64,14 +103,24 @@ const CartPage = () => {
   return (
     <section className="bg-white min-h-screen py-12 px-4 sm:px-8">
       <div className="max-w-7xl mx-auto">
-        <h2 className="text-3xl font-bold mb-6">Your Cart</h2>
+        <h2 className="text-3xl font-bold mb-6 text-black">Your Cart</h2>
 
         <div className="grid gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
           {cartItems.map((item) => (
             <div
               key={item.id}
-              className="bg-white border border-gray-200 shadow-sm rounded-xl overflow-hidden hover:shadow-md"
+              className="relative bg-white border border-gray-200 shadow-sm rounded-xl overflow-hidden hover:shadow-md"
             >
+              {/* Checkbox Top-Left */}
+              <div className="absolute top-2 left-2 z-10">
+                <input
+                  type="checkbox"
+                  checked={selectedItems.includes(item.id)}
+                  onChange={() => toggleSelectItem(item.id)}
+                  className="w-4 h-4"
+                />
+              </div>
+
               {/* Image */}
               <div className="w-full h-60 bg-white border-b relative">
                 {item.productVariant?.product?.images?.[0]?.url ? (
@@ -108,20 +157,46 @@ const CartPage = () => {
                   </span>
                 </div>
 
-                <div className="mt-1 text-sm text-gray-600">
-                  Quantity: <span className="font-medium">{item.quantity}</span>
-                </div>
-
                 <p className="text-lg font-bold text-gray-900 mt-2">
                   ₹{item.productVariant.price * item.quantity}
                 </p>
 
-                <div className="mt-4 flex justify-end">
+                {/* Bottom Quantity Controls */}
+                <div className="mt-4 flex justify-between items-center">
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() =>
+                        handleQuantityChange(
+                          item.productVariantId,
+                          item.quantity - 1
+                        )
+                      }
+                      className="px-2 py-1 bg-gray-100 text-black rounded"
+                      disabled={item.quantity === 1}
+                    >
+                      −
+                    </button>
+                    <span className="text-gray-800 font-semibold">
+                      {item.quantity}
+                    </span>
+                    <button
+                      onClick={() =>
+                        handleQuantityChange(
+                          item.productVariantId,
+                          item.quantity + 1
+                        )
+                      }
+                      className="px-2 py-1 bg-gray-100 text-black rounded"
+                    >
+                      +
+                    </button>
+                  </div>
+
                   <button
                     onClick={() => handleRemove(item.id)}
                     className="text-sm text-red-600 font-medium hover:underline"
                   >
-                    Remove
+                    <Trash2 size={22} />
                   </button>
                 </div>
               </div>
@@ -131,13 +206,25 @@ const CartPage = () => {
 
         {/* Total */}
         <div className="mt-10 flex justify-between items-center border-t pt-6">
-          <span className="text-xl font-semibold">Total</span>
-          <span className="text-xl font-bold">₹{total.toFixed(2)}</span>
+          <span className="text-xl font-semibold text-black">Total</span>
+          <span className="text-xl font-bold text-black">
+            ₹{total.toFixed(2)}
+          </span>
         </div>
 
-        <button className="mt-6 bg-black text-white px-6 py-3 rounded-full w-full md:w-fit">
-          Proceed to Checkout
-        </button>
+        <Link
+          href={{
+            pathname: "/orders/checkout",
+            query: { items: selectedItems.join(",") }, // optional if you want to pass selected items via query
+          }}
+        >
+          <button
+            disabled={selectedItems.length === 0}
+            className="mt-6 bg-black text-white px-6 py-3 rounded-full w-full md:w-fit disabled:opacity-50"
+          >
+            Place Order
+          </button>
+        </Link>
       </div>
     </section>
   );

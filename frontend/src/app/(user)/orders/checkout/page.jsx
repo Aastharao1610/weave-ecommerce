@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 
 import { useRouter } from "next/navigation";
 
@@ -289,4 +290,14 @@ const CheckoutPage = () => {
   );
 };
 
-export default CheckoutPage;
+const CheckoutWrapper = () => {
+  return (
+    <Suspense fallback={<div>Loading checkout page...</div>}>
+      <CheckoutPage />
+    </Suspense>
+  );
+};
+
+export default CheckoutWrapper;
+
+// export default CheckoutPage;

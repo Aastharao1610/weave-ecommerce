@@ -78,6 +78,7 @@ import { useSearchParams } from "next/navigation";
 import axios from "axios";
 import Link from "next/link";
 import { toast } from "react-toastify";
+import { Suspense } from "react";
 
 const PaymentSuccessPage = () => {
   const searchParams = useSearchParams();
@@ -158,4 +159,12 @@ const PaymentSuccessPage = () => {
   );
 };
 
-export default PaymentSuccessPage;
+const PaymentSuccessWrapper = () => {
+  return (
+    <Suspense fallback={<div>Loading payment details.....</div>}>
+      <PaymentSuccessPage />
+    </Suspense>
+  );
+};
+
+export default PaymentSuccessWrapper;

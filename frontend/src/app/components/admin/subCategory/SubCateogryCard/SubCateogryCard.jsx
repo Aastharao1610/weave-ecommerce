@@ -1,7 +1,7 @@
 "use client";
 import { Pencil, Trash2 } from "lucide-react";
 import { useState } from "react";
-import DeleteConfirmationModal from "../../../modal/Modal";
+import ConfirmModal from "@/app/components/modal/Modal";
 import toast from "react-hot-toast";
 import axios from "axios";
 
@@ -49,10 +49,15 @@ const SubcategoryCard = ({ subcategory, onEdit, onDeleted }) => {
         </button>
       </div>
 
-      <DeleteConfirmationModal
+      <ConfirmModal
         isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
+        onCancel={() => setIsModalOpen(false)}
         onConfirm={handleDelete}
+        title="Delete subCategory"
+        message="Are you sure you want to delete this Subcatoegory? This action cannot be undone."
+        confirmText="Delete"
+        cancelText="Cancel"
+        confirmClass="bg-red-600 hover:bg-red-700 text-white"
       />
     </div>
   );

@@ -47,11 +47,20 @@ const login = async (req, res) => {
       },
     });
 
+    // Access Token (optional if using for frontend JS)
     res.cookie("token", accessToken, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
+      secure: false,
       sameSite: "Lax",
       maxAge: 60 * 60 * 1000,
+    });
+
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      secure: false,
+      sameSite: "Lax",
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+      path: "/",
     });
 
     res.status(200).json({

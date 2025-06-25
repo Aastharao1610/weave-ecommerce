@@ -3,7 +3,7 @@ import axios from "axios";
 import { Trash2 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import DeleteConfirmationModal from "@/app/components/modal/Modal";
+import ConfirmModal from "@/app/components/modal/Modal";
 
 const Users = () => {
   const [users, setUsers] = useState([]);
@@ -128,10 +128,15 @@ const Users = () => {
         </div>
       )}
 
-      <DeleteConfirmationModal
+      <ConfirmModal
         isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
+        onCancel={() => setIsModalOpen(false)}
         onConfirm={handleDelete}
+        title="Delete User"
+        message="Are you sure you want to delete this user? This action cannot be undone."
+        confirmText="Delete"
+        cancelText="Cancel"
+        confirmClass="bg-red-600 hover:bg-red-700 text-white"
       />
     </div>
   );

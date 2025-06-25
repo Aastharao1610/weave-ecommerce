@@ -55,7 +55,7 @@ const createCheckoutSession = async (req, res) => {
     payment_method_types: ["card"],
     mode: "payment",
     line_items: lineItems,
-    success_url: `http://localhost:3000/payment-success?orderId=${order.id}`,
+    success_url: `http://localhost:3000/orders/payement-success?orderId=${order.id}`,
     cancel_url: `http://localhost:3000/payment-cancel?orderId=${order.id}`,
     metadata: {
       orderId: order.id.toString(),

@@ -132,7 +132,7 @@ const webhookHandler = async (req, res) => {
     });
 
     if (paymentUpdate.count === 0) {
-      console.error(`❌ No payment record found for order ID ${orderId}`);
+      console.error(`No payment record found for order ID ${orderId}`);
     }
 
     // 2. Mark order as SHIPPED
@@ -199,8 +199,6 @@ const webhookHandler = async (req, res) => {
       ],
     });
 
-    // 7. Optional: delete PDF file after sending
-    // fs.unlinkSync(pdfPath);
     console.log(`Payment confirmed. Order ${orderId} marked as SHIPPED.`);
   }
 

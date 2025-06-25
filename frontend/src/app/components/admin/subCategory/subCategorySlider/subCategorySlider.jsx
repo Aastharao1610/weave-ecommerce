@@ -34,7 +34,7 @@ const SubcategorySlider = ({ subcategories = [], onEdit, onDeleted }) => {
   };
 
   return (
-    <div className="relative  py-6 bg-green-700 w-full">
+    <div className="relative  py-6  w-full">
       <div
         ref={scrollRef}
         className="flex gap-4 overflow-x-auto scroll-smooth no-scrollbar px-4"

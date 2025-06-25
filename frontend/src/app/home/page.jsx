@@ -8,14 +8,14 @@ import Products from "./product";
 export default function Homepage() {
   return (
     <div className="min-h-screen flex flex-col font-sans bg-white ">
-      <Header />
+      {/* <Header /> */}
 
       {/* <Category /> */}
 
       <Banner />
 
       <Products />
-      <Footer />
+      {/* <Footer /> */}
     </div>
   );
 }

@@ -3,7 +3,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { Trash2, Pencil } from "lucide-react";
 import { useState } from "react";
-import DeleteConfirmationModal from "../../../modal/Modal";
+import ConfirmModal from "@/app/components/modal/Modal";
 
 const CategoryCard = ({ category, onDeleted, onEdit }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -55,10 +55,15 @@ const CategoryCard = ({ category, onDeleted, onEdit }) => {
         </div>
       </div>
 
-      <DeleteConfirmationModal
+      <ConfirmModal
         isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
+        onCancel={() => setIsModalOpen(false)}
         onConfirm={handleDelete}
+        title="Delete Category"
+        message="Are you sure you want to delete this category? This action cannot be undone."
+        confirmText="Delete"
+        cancelText="Cancel"
+        confirmClass="bg-red-600 hover:bg-red-700 text-white"
       />
     </div>
   );

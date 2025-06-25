@@ -3,7 +3,6 @@ import prisma from "../../lib/db.js";
 const createOrder = async (req, res) => {
   let transaction;
   try {
-    // 1. Authentication & Input Validation
     if (!req.user?.userId) {
       return res.status(401).json({ error: "Authentication required" });
     }
@@ -27,7 +26,11 @@ const createOrder = async (req, res) => {
       });
     }
 
-    const { items: selectedItems, ...shippingBillingInfo } = req.body;
+    const {
+      items: selectedItems,
+      id: _ignored,
+      ...shippingBillingInfo
+    } = req.body;
 
     // 2. Validate selected items
     if (!Array.isArray(selectedItems) || selectedItems.length === 0) {
@@ -128,14 +131,14 @@ const createOrder = async (req, res) => {
       );
 
       // 10. Remove only ordered items from cart
-      // await tx.cartItem.deleteMany({
-      //   where: {
-      //     cartId: cart.id,
-      //     productVariantId: {
-      //       in: selectedCartItems.map((item) => item.productVariantId),
-      //     },
-      //   },
-      // });
+      await tx.cartItem.deleteMany({
+        where: {
+          cartId: cart.id,
+          productVariantId: {
+            in: selectedCartItems.map((item) => item.productVariantId),
+          },
+        },
+      });
 
       return order;
     });

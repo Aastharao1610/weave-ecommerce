@@ -46,7 +46,7 @@ const Orders = () => {
                 const category =
                   firstItem?.productVariant?.product?.Subcategory?.category
                     ?.name;
-                console.log(firstItem.productVariant.product);
+
                 return (
                   <tr
                     key={order.id}

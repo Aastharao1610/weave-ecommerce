@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -11,23 +11,31 @@ const CartPage = () => {
   const [cartItems, setCartItems] = useState([]);
   const [selectedItems, setSelectedItems] = useState([]);
   const [loading, setLoading] = useState(true);
+  const prevItemIdsRef = useRef([]);
 
   const fetchCart = async () => {
     try {
       const res = await axios.get("http://localhost:5000/api/cart", {
         withCredentials: true,
       });
+
       const newItems = res.data.cart.items || [];
+      const newItemIds = newItems.map((item) => item.id);
+      // const prevItemIds = cartItems.map((item) => item.id);
 
-      const allItemIds = newItems.map((item) => item.id);
+      // Step 1: Detect truly new item IDs
+      const newlyAddedIds = newItemIds.filter(
+        (id) => !prevItemIdsRef.current.includes(id)
+      );
 
-      // ✅ preserve old selection + select any new ones
+      // Step 2: Add only new ones to selectedItems
       const updatedSelected = Array.from(
-        new Set([...selectedItems, ...allItemIds])
+        new Set([...selectedItems, ...newlyAddedIds])
       );
 
       setCartItems(newItems);
       setSelectedItems(updatedSelected);
+      prevItemIdsRef.current = newItemIds;
     } catch (err) {
       console.error("Error fetching cart:", err);
       toast.error("Failed to load cart");
@@ -36,11 +44,15 @@ const CartPage = () => {
     }
   };
 
-  const handleRemove = async (itemId) => {
+  const handleRemove = async (productVariantId) => {
+    console.log(productVariantId);
     try {
-      await axios.delete(`http://localhost:5000/api/cart/delete/${itemId}`, {
-        withCredentials: true,
-      });
+      await axios.delete(
+        `http://localhost:5000/api/cart/delete/${productVariantId}`,
+        {
+          withCredentials: true,
+        }
+      );
       toast.success("Item removed from cart");
       fetchCart();
     } catch (err) {
@@ -193,7 +205,7 @@ const CartPage = () => {
                   </div>
 
                   <button
-                    onClick={() => handleRemove(item.id)}
+                    onClick={() => handleRemove(item.productVariantId)}
                     className="text-sm text-red-600 font-medium hover:underline"
                   >
                     <Trash2 size={22} />
@@ -215,7 +227,7 @@ const CartPage = () => {
         <Link
           href={{
             pathname: "/orders/checkout",
-            query: { items: selectedItems.join(",") }, // optional if you want to pass selected items via query
+            query: { items: selectedItems.join(",") },
           }}
         >
           <button

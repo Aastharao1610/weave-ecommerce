@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Image from "next/image";
-import { toast } from "react-hot-toast";
+import { toast } from "react-toastify";
 import ConfirmModal from "@/app/components/modal/Modal";
 
 const WishlistPage = () => {
@@ -44,7 +44,8 @@ const WishlistPage = () => {
         await axios.post(
           "http://localhost:5000/api/cart/create",
           {
-            productId: modalItem.productId,
+            productVariantId: modalItem.productVariant?.id,
+
             quantity: 1,
           },
           { withCredentials: true }
@@ -94,21 +95,6 @@ const WishlistPage = () => {
                 key={item.id}
                 className="bg-white border border-gray-200 shadow-sm rounded-xl overflow-hidden hover:shadow-md"
               >
-                {/* <div className="w-full h-auto bg-white border-b">
-                  {item.product?.images?.[0]?.url ? (
-                    <Image
-                      src={item.product.images[0].url}
-                      alt={item.product.name || "Product Image"}
-                      width={400}
-                      height={300}
-                      className="object-cover w-full h-auto"
-                    />
-                  ) : (
-                    <div className="w-full h-[300px] flex items-center justify-center text-gray-400 bg-gray-100">
-                      No Image Available
-                    </div>
-                  )}
-                </div> */}
                 <div className="w-full h-60 bg-white border-b relative">
                   {item.productVariant?.product?.images?.[0]?.url ? (
                     <Image

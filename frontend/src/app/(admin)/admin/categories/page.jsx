@@ -14,7 +14,7 @@ const AdminCategories = () => {
 
   const fetchCategories = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/category", {
+      const res = await axios.get(`${process.env.BACKEND_URL}/api/category`, {
         withCredentials: true,
       });
       setCategories(res.data.category);

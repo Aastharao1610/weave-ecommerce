@@ -13,7 +13,7 @@ const Users = () => {
 
   const fetchUsers = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/api/auth", {
+      const response = await axios.get(`${process.env.BACKEND_URL}/api/auth`, {
         withCredentials: true,
       });
       setUsers(response.data);
@@ -32,7 +32,7 @@ const Users = () => {
   const handleDelete = async () => {
     try {
       await axios.delete(
-        `http://localhost:5000/api/auth/user/${selectedUserId}`,
+        `${process.env.BACKEND_URL}/api/auth/user/${selectedUserId}`,
         {
           withCredentials: true,
         }

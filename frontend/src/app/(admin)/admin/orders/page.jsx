@@ -9,7 +9,7 @@ const Orders = () => {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/orders", {
+        const res = await axios.get(`${process.env.BACKEND_URL}/api/orders`, {
           withCredentials: true,
         });
         setOrders(res.data.orders || []);

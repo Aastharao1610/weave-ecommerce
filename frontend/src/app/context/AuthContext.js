@@ -11,7 +11,7 @@ export const AuthProvider = ({ children }) => {
 
   const fetchUser = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/auth/me", {
+      const res = await axios.get(`${process.env.BACKEND_URL}/api/auth/me`, {
         withCredentials: true,
       });
       setUser(res.data.user);

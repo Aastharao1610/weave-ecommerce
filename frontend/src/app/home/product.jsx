@@ -12,7 +12,7 @@ const Products = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/products");
+        const res = await axios.get(`${process.env.BACKEND_URL}/api/products`);
         const productList = res.data.product || [];
         setProducts(productList.slice(0, 5));
       } catch (err) {
@@ -22,7 +22,9 @@ const Products = () => {
 
     const fetchImages = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/productImages");
+        const res = await axios.get(
+          `${process.env.BACKEND_URL}/api/productImages`
+        );
         setImages(res.data || []);
       } catch (err) {
         console.error("Failed to fetch images:", err);

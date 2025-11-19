@@ -10,7 +10,7 @@
 
 //   const fetchCategories = async () => {
 //     try {
-//       const response = await axios.get("http://localhost:5000/api/category/");
+//       const response = await axios.get(`${process.env.BACKEND_URL}/api/category/");
 //       console.log(response);
 //       console.log("Fetched categories:", response.data, response.data.category);
 
@@ -71,7 +71,7 @@ const CategoryNav = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/category");
+        const res = await axios.get(`${process.env.BACKEND_URL}/api/category`);
         console.log(res.data);
         setCategories(res.data.category || []);
       } catch (err) {

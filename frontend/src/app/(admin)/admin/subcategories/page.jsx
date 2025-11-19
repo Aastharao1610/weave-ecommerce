@@ -12,7 +12,7 @@ export default function SubcategoryPage() {
   const [editData, setEditData] = useState(null);
 
   const load = async () => {
-    const res = await axios.get("http://localhost:5000/api/Category", {
+    const res = await axios.get(`${process.env.BACKEND_URL}/api/Category`, {
       withCredentials: true,
     });
     setCategory(res.data.category);

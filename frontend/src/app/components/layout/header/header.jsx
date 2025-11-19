@@ -23,7 +23,7 @@ const Header = () => {
 
   // useEffect(() => {
   //   axios
-  //     .get("http://localhost:5000/api/auth/me", { withCredentials: true })
+  //     .get(`${process.env.BACKEND_URL}/api/auth/me", { withCredentials: true })
   //     .then((res) => setUser(res.data.user))
   //     .catch(() => setUser(null));
   // }, []);
@@ -33,7 +33,7 @@ const Header = () => {
   useEffect(() => {
     const fetchCartCount = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/cart", {
+        const res = await axios.get(`${process.env.BACKEND_URL}/api/cart`, {
           withCredentials: true,
         });
         setCartCount(res.data.cart?.items?.length || 0);
@@ -55,7 +55,7 @@ const Header = () => {
 
   const handleLogout = async () => {
     await axios.post(
-      "http://localhost:5000/api/auth/logout",
+      `${process.env.BACKEND_URL}/api/auth/logout`,
       {},
       { withCredentials: true }
     );

@@ -26,9 +26,12 @@ const ProductDetail = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get(`/api/products/${id}`, {
-          withCredentials: true,
-        });
+        const res = await axios.get(
+          `${process.env.BACKEND_URL}/api/products/${id}`,
+          {
+            withCredentials: true,
+          }
+        );
 
         setProduct(res.data.product);
         setImage(res.data.image);

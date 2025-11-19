@@ -11,7 +11,7 @@ const SubcategoryCard = ({ subcategory, onEdit, onDeleted }) => {
   const handleDelete = async () => {
     try {
       await axios.delete(
-        `http://localhost:5000/api/subCategory/${subcategory.id}`,
+        `${process.env.BACKEND_URL}/api/subCategory/${subcategory.id}`,
         {
           withCredentials: true,
         }

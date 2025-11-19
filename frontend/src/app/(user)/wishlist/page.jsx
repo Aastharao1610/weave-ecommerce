@@ -15,7 +15,7 @@ const WishlistPage = () => {
 
   const fetchWishlist = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/wishlist", {
+      const res = await axios.get(`${process.env.BACKEND_URL}/api/wishlist`, {
         withCredentials: true,
       });
       console.log(res.data, "wishlist response");
@@ -42,7 +42,7 @@ const WishlistPage = () => {
     try {
       if (modalType === "cart") {
         await axios.post(
-          "http://localhost:5000/api/cart/create",
+          `${process.env.BACKEND_URL}/api/cart/create`,
           {
             productVariantId: modalItem.productVariant?.id,
 
@@ -53,7 +53,7 @@ const WishlistPage = () => {
         toast.success("Moved to cart");
       } else if (modalType === "remove") {
         await axios.delete(
-          `http://localhost:5000/api/wishlist/delete/${modalItem.id}`,
+          `${process.env.BACKEND_URL}/api/wishlist/delete/${modalItem.id}`,
           { withCredentials: true }
         );
         toast.success("Removed from wishlist");

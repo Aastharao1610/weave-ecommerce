@@ -15,7 +15,7 @@ const CartPage = () => {
 
   const fetchCart = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/cart", {
+      const res = await axios.get(`${process.env.BACKEND_URL}/api/cart`, {
         withCredentials: true,
       });
 
@@ -48,7 +48,7 @@ const CartPage = () => {
     console.log(productVariantId);
     try {
       await axios.delete(
-        `http://localhost:5000/api/cart/delete/${productVariantId}`,
+        `${process.env.BACKEND_URL}/api/cart/delete/${productVariantId}`,
         {
           withCredentials: true,
         }
@@ -64,7 +64,7 @@ const CartPage = () => {
   const handleQuantityChange = async (productVariantId, newQuantity) => {
     try {
       await axios.put(
-        `http://localhost:5000/api/cart/update/${productVariantId}`,
+        `${process.env.BACKEND_URL}/api/cart/update/${productVariantId}`,
         { quantity: newQuantity },
         { withCredentials: true }
       );

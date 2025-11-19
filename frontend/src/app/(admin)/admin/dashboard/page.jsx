@@ -16,7 +16,7 @@ const AdminDashboard = () => {
   useEffect(() => {
     const fetchCounts = async () => {
       try {
-        const baseURL = "http://localhost:5000/api";
+        const baseURL = `${process.env.BACKEND_URL}/api`;
 
         const [productsRes, categoriesRes, subcategoriesRes, users, orders] =
           await Promise.all([

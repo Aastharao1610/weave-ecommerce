@@ -65,7 +65,7 @@ const Login = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/auth/login",
+        `${process.env.BACKEND_URL}/api/auth/login`,
         {
           email: input,
           password,

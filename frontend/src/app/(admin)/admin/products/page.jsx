@@ -14,14 +14,14 @@ export default function ProductPage() {
 
   // Load categories + subcategories
   const loadCategories = async () => {
-    const res = await axios.get("http://localhost:5000/api/Category", {
+    const res = await axios.get(`${process.env.BACKEND_URL}/api/Category`, {
       withCredentials: true,
     });
     setCategories(res.data.category);
   };
 
   const loadProducts = async () => {
-    const res = await axios.get("http://localhost:5000/api/products", {
+    const res = await axios.get(`${process.env.BACKEND_URL}/api/products`, {
       withCredentials: true,
     });
     console.log(res.data.product);

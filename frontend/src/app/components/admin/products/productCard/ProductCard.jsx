@@ -10,9 +10,12 @@ export default function ProductCard({ product, onEdit, onDeleted }) {
 
   const handleDelete = async () => {
     try {
-      await axios.delete(`http://localhost:5000/api/products/${product.id}`, {
-        withCredentials: true,
-      });
+      await axios.delete(
+        `${process.env.BACKEND_URL}/api/products/${product.id}`,
+        {
+          withCredentials: true,
+        }
+      );
       toast.success("Product deleted");
       onDeleted();
     } catch (err) {

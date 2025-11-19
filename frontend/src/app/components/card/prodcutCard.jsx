@@ -22,7 +22,7 @@ const ProductCard = ({ product }) => {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/auth/me", {
+        const res = await axios.get(`${process.env.BACKEND_URL}/api/auth/me`, {
           withCredentials: true,
         });
         setIsLoggedIn(true);
@@ -52,9 +52,12 @@ const ProductCard = ({ product }) => {
       console.log("Logged in. Checking wishlist for product:", product.id);
 
       try {
-        const res = await axios.get("http://localhost:5000/api/wishlist/", {
-          withCredentials: true,
-        });
+        const res = await axios.get(
+          `${process.env.BACKEND_URL}/api/wishlist/`,
+          {
+            withCredentials: true,
+          }
+        );
         console.log("Wishlist response:", res.data);
 
         const wishlisted = res.data?.wishlist?.items?.some(
@@ -76,7 +79,7 @@ const ProductCard = ({ product }) => {
       if (!isLoggedIn) return;
 
       try {
-        const res = await axios.get("http://localhost:5000/api/cart", {
+        const res = await axios.get(`${process.env.BACKEND_URL}/api/cart`, {
           withCredentials: true,
         });
 
@@ -104,7 +107,7 @@ const ProductCard = ({ product }) => {
 
     try {
       await axios.post(
-        "http://localhost:5000/api/cart/create",
+        `${process.env.BACKEND_URL}/api/cart/create`,
         {
           productVariantId: product.variant?.[0]?.id,
 
@@ -133,7 +136,7 @@ const ProductCard = ({ product }) => {
     }
 
     try {
-      const res = await axios.get("http://localhost:5000/api/wishlist", {
+      const res = await axios.get(`${process.env.BACKEND_URL}/api/wishlist`, {
         withCredentials: true,
       });
 
@@ -146,7 +149,7 @@ const ProductCard = ({ product }) => {
       if (matchedItem) {
         console.log("🆔 Deleting item with ID:", matchedItem.id);
         await axios.delete(
-          `http://localhost:5000/api/wishlist/delete/${matchedItem.id}`,
+          `${process.env.BACKEND_URL}/api/wishlist/delete/${matchedItem.id}`,
           {
             withCredentials: true,
             headers: {
@@ -160,7 +163,7 @@ const ProductCard = ({ product }) => {
         // ✅ Add fresh
         console.log("➕ Adding item to wishlist");
         await axios.post(
-          "http://localhost:5000/api/wishlist/create",
+          `${process.env.BACKEND_URL}/api/wishlist/create`,
           {
             productVariantId: variantId,
             quantity: 1,

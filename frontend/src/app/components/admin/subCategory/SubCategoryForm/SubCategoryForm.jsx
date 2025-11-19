@@ -22,9 +22,11 @@ export default function SubcategoryForm({
   };
 
   useEffect(() => {
-    axios.get(`${process.env.BACKEND_URL}/api/Category/`).then((res) => {
-      setCategory(res.data.category);
-    });
+    axios
+      .get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/Category/`)
+      .then((res) => {
+        setCategory(res.data.category);
+      });
   }, []);
 
   const handleSubmit = async (e) => {
@@ -44,7 +46,7 @@ export default function SubcategoryForm({
       setLoading(true);
       if (editMode && initialData.id) {
         await axios.put(
-          `${process.env.BACKEND_URL}/api/Subcategory/update/${initialData.id}`,
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/Subcategory/update/${initialData.id}`,
           formData,
           {
             withCredentials: true,
@@ -54,7 +56,7 @@ export default function SubcategoryForm({
         toast.success("Subcategory UPdated");
       } else {
         await axios.post(
-          `${process.env.BACKEND_URL}/api/Subcategory/create`,
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/Subcategory/create`,
           formData,
           {
             headers: {

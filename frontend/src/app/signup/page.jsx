@@ -64,7 +64,7 @@ const Signup = () => {
 
     try {
       const response = await axios.post(
-        `${process.env.BACKEND_URL}/api/auth/signup`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/auth/signup`,
         form
       );
       console.log(response);

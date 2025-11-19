@@ -68,7 +68,7 @@ export default function ProductForm({ initialData, categories, onSuccess }) {
     try {
       if (safeData.id) {
         await axios.put(
-          `${process.env.BACKEND_URL}/api/products/update/${safeData.id}`,
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/products/update/${safeData.id}`,
           formData,
           {
             withCredentials: true,
@@ -78,7 +78,7 @@ export default function ProductForm({ initialData, categories, onSuccess }) {
         toast.success("Product updated successfully");
       } else {
         await axios.post(
-          `${process.env.BACKEND_URL}/api/products/create`,
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/products/create`,
           formData,
           {
             withCredentials: true,

@@ -12,9 +12,12 @@ export default function SubcategoryPage() {
   const [editData, setEditData] = useState(null);
 
   const load = async () => {
-    const res = await axios.get(`${process.env.BACKEND_URL}/api/Category`, {
-      withCredentials: true,
-    });
+    const res = await axios.get(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/Category`,
+      {
+        withCredentials: true,
+      }
+    );
     setCategory(res.data.category);
   };
 

@@ -12,7 +12,7 @@ const options = {
     },
     servers: [
       {
-        url: `${process.env.BACKEND_URL}`,
+        url: `${process.env.NEXT_PUBLIC_BACKEND_URL}`,
       },
     ],
   },

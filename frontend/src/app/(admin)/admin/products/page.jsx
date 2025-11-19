@@ -14,16 +14,22 @@ export default function ProductPage() {
 
   // Load categories + subcategories
   const loadCategories = async () => {
-    const res = await axios.get(`${process.env.BACKEND_URL}/api/Category`, {
-      withCredentials: true,
-    });
+    const res = await axios.get(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/Category`,
+      {
+        withCredentials: true,
+      }
+    );
     setCategories(res.data.category);
   };
 
   const loadProducts = async () => {
-    const res = await axios.get(`${process.env.BACKEND_URL}/api/products`, {
-      withCredentials: true,
-    });
+    const res = await axios.get(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/products`,
+      {
+        withCredentials: true,
+      }
+    );
     console.log(res.data.product);
     setProducts(res.data.product);
   };

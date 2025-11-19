@@ -33,9 +33,12 @@ const CheckoutPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const cartRes = await axios.get(`${process.env.BACKEND_URL}/api/cart`, {
-          withCredentials: true,
-        });
+        const cartRes = await axios.get(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/cart`,
+          {
+            withCredentials: true,
+          }
+        );
         const items = cartRes.data.cart?.items || [];
         setCartItems(items);
 
@@ -55,7 +58,7 @@ const CheckoutPage = () => {
         }
 
         const addressRes = await axios.get(
-          `${process.env.BACKEND_URL}/api/user/address`,
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/user/address`,
           {
             withCredentials: true,
           }
@@ -115,7 +118,7 @@ const CheckoutPage = () => {
 
       if (!useSaved && saveAddressChecked) {
         await axios.post(
-          `${process.env.BACKEND_URL}/api/user/address/save`,
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/user/address/save`,
           address,
           {
             withCredentials: true,
@@ -125,7 +128,7 @@ const CheckoutPage = () => {
       }
 
       const orderRes = await axios.post(
-        `${process.env.BACKEND_URL}/api/orders/create`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/orders/create`,
         {
           ...address,
           items: selectedCartVariants,
@@ -137,7 +140,7 @@ const CheckoutPage = () => {
       toast.success("Order placed! Redirecting to payment...");
 
       const paymentRes = await axios.post(
-        `${process.env.BACKEND_URL}/api/payments/checkoutSession/${orderId}`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/payments/checkoutSession/${orderId}`,
         {},
         { withCredentials: true }
       );

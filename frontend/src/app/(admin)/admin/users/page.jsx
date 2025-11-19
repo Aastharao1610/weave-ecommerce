@@ -13,9 +13,12 @@ const Users = () => {
 
   const fetchUsers = async () => {
     try {
-      const response = await axios.get(`${process.env.BACKEND_URL}/api/auth`, {
-        withCredentials: true,
-      });
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/auth`,
+        {
+          withCredentials: true,
+        }
+      );
       setUsers(response.data);
     } catch (error) {
       console.error("Error fetching users:", error);
@@ -32,7 +35,7 @@ const Users = () => {
   const handleDelete = async () => {
     try {
       await axios.delete(
-        `${process.env.BACKEND_URL}/api/auth/user/${selectedUserId}`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/auth/user/${selectedUserId}`,
         {
           withCredentials: true,
         }

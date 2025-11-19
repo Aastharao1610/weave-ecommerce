@@ -11,7 +11,7 @@ export default function AdminHeader() {
   const handleLogout = async () => {
     try {
       await axios.post(
-        `${process.env.BACKEND_URL}/api/auth/logout`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/auth/logout`,
         {},
         { withCredentials: true }
       );

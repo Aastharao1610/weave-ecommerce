@@ -9,9 +9,12 @@ const Orders = () => {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const res = await axios.get(`${process.env.BACKEND_URL}/api/orders`, {
-          withCredentials: true,
-        });
+        const res = await axios.get(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/orders`,
+          {
+            withCredentials: true,
+          }
+        );
         setOrders(res.data.orders || []);
       } catch (err) {
         console.error("Error fetching orders:", err);

@@ -27,7 +27,7 @@ const ProductDetail = () => {
     const fetchData = async () => {
       try {
         const res = await axios.get(
-          `${process.env.BACKEND_URL}/api/products/${id}`,
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/products/${id}`,
           {
             withCredentials: true,
           }

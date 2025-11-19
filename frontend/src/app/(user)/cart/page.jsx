@@ -15,9 +15,12 @@ const CartPage = () => {
 
   const fetchCart = async () => {
     try {
-      const res = await axios.get(`${process.env.BACKEND_URL}/api/cart`, {
-        withCredentials: true,
-      });
+      const res = await axios.get(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/cart`,
+        {
+          withCredentials: true,
+        }
+      );
 
       const newItems = res.data.cart.items || [];
       const newItemIds = newItems.map((item) => item.id);
@@ -48,7 +51,7 @@ const CartPage = () => {
     console.log(productVariantId);
     try {
       await axios.delete(
-        `${process.env.BACKEND_URL}/api/cart/delete/${productVariantId}`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/cart/delete/${productVariantId}`,
         {
           withCredentials: true,
         }
@@ -64,7 +67,7 @@ const CartPage = () => {
   const handleQuantityChange = async (productVariantId, newQuantity) => {
     try {
       await axios.put(
-        `${process.env.BACKEND_URL}/api/cart/update/${productVariantId}`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/cart/update/${productVariantId}`,
         { quantity: newQuantity },
         { withCredentials: true }
       );

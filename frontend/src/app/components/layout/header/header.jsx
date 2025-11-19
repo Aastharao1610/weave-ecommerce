@@ -23,7 +23,7 @@ const Header = () => {
 
   // useEffect(() => {
   //   axios
-  //     .get(`${process.env.BACKEND_URL}/api/auth/me", { withCredentials: true })
+  //     .get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/auth/me", { withCredentials: true })
   //     .then((res) => setUser(res.data.user))
   //     .catch(() => setUser(null));
   // }, []);
@@ -33,9 +33,12 @@ const Header = () => {
   useEffect(() => {
     const fetchCartCount = async () => {
       try {
-        const res = await axios.get(`${process.env.BACKEND_URL}/api/cart`, {
-          withCredentials: true,
-        });
+        const res = await axios.get(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/cart`,
+          {
+            withCredentials: true,
+          }
+        );
         setCartCount(res.data.cart?.items?.length || 0);
       } catch (error) {
         console.error("Cart count fetch failed", error);
@@ -55,7 +58,7 @@ const Header = () => {
 
   const handleLogout = async () => {
     await axios.post(
-      `${process.env.BACKEND_URL}/api/auth/logout`,
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/auth/logout`,
       {},
       { withCredentials: true }
     );

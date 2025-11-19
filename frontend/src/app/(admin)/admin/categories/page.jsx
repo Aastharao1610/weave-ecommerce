@@ -14,9 +14,12 @@ const AdminCategories = () => {
 
   const fetchCategories = async () => {
     try {
-      const res = await axios.get(`${process.env.BACKEND_URL}/api/category`, {
-        withCredentials: true,
-      });
+      const res = await axios.get(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/category`,
+        {
+          withCredentials: true,
+        }
+      );
       setCategories(res.data.category);
     } catch (err) {
       toast.error("Failed to fetch categories");

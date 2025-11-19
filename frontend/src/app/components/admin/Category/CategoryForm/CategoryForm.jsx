@@ -37,7 +37,7 @@ const CategoryForm = ({ onSuccess, editMode = false, initialData = {} }) => {
 
       if (editMode && initialData.id) {
         await axios.put(
-          `${process.env.BACKEND_URL}/api/category/update/${initialData.id}`,
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/category/update/${initialData.id}`,
           formData,
           {
             withCredentials: true,
@@ -48,7 +48,7 @@ const CategoryForm = ({ onSuccess, editMode = false, initialData = {} }) => {
         toast.success("Category Updated!");
       } else {
         await axios.post(
-          `${process.env.BACKEND_URL}/api/category/create`,
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/category/create`,
           formData,
           {
             withCredentials: true,

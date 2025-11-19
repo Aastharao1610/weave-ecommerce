@@ -11,7 +11,7 @@ export default function ProductCard({ product, onEdit, onDeleted }) {
   const handleDelete = async () => {
     try {
       await axios.delete(
-        `${process.env.BACKEND_URL}/api/products/${product.id}`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/products/${product.id}`,
         {
           withCredentials: true,
         }

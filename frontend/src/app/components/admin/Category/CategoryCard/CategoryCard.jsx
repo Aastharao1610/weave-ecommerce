@@ -11,7 +11,7 @@ const CategoryCard = ({ category, onDeleted, onEdit }) => {
   const handleDelete = async () => {
     try {
       await axios.delete(
-        `${process.env.BACKEND_URL}/api/Category/delete/${category.id}`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/Category/delete/${category.id}`,
         {
           withCredentials: true,
         }

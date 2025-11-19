@@ -20,7 +20,7 @@ const PaymentSuccessPage = () => {
 
       try {
         const res = await axios.get(
-          `${process.env.BACKEND_URL}/api/orders/${orderId}`,
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/orders/${orderId}`,
           { withCredentials: true }
         );
         setOrder(res.data.order);

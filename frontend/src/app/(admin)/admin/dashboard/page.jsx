@@ -16,7 +16,7 @@ const AdminDashboard = () => {
   useEffect(() => {
     const fetchCounts = async () => {
       try {
-        const baseURL = `${process.env.BACKEND_URL}/api`;
+        const baseURL = `${process.env.NEXT_PUBLIC_BACKEND_URL}/api`;
 
         const [productsRes, categoriesRes, subcategoriesRes, users, orders] =
           await Promise.all([

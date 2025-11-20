@@ -1,8 +1,3 @@
-import prisma from "../../lib/db.js";
-import bcrypt from "bcrypt";
-import { sendVerificationEmail } from "../../lib/sendVerification.js";
-import { v4 as uuidv4 } from "uuid";
-
 export const signup = async (req, res) => {
   try {
     const { name, email, password } = req.body;
@@ -12,20 +7,36 @@ export const signup = async (req, res) => {
       return res.status(400).json({ error: "User already exists" });
     }
 
+    const existingPending = await prisma.pendingUser.findUnique({
+      where: { email },
+    });
     const hashedPassword = await bcrypt.hash(password, 10);
     const token = uuidv4();
 
-    await prisma.pendingUser.create({
-      data: {
-        name,
-        email,
-        hashedPassword,
-        token,
-        expiresAt: new Date(Date.now() + 60 * 60 * 1000),
-      },
-    });
+    if (existingPending) {
+      // update existing pending entry
+      await prisma.pendingUser.update({
+        where: { email },
+        data: {
+          name,
+          hashedPassword,
+          token,
+          expiresAt: new Date(Date.now() + 60 * 60 * 1000),
+        },
+      });
+    } else {
+      // create a new pending entry
+      await prisma.pendingUser.create({
+        data: {
+          name,
+          email,
+          hashedPassword,
+          token,
+          expiresAt: new Date(Date.now() + 60 * 60 * 1000),
+        },
+      });
+    }
 
-    // Just send the email — don't create the user again!
     await sendVerificationEmail({ email, token });
 
     res.status(201).json({ message: "Verification email sent" });

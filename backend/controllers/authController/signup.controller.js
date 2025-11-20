@@ -1,3 +1,8 @@
+import prisma from "../../lib/db.js";
+import bcrypt from "bcrypt";
+import { sendVerificationEmail } from "../../lib/sendVerification.js";
+import { v4 as uuidv4 } from "uuid";
+
 export const signup = async (req, res) => {
   try {
     const { name, email, password } = req.body;

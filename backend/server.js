@@ -16,7 +16,7 @@ app.post(
 
 app.use(
   cors({
-    origin: `${process.env.DOMAIN}`,
+    origin: [process.env.DOMAIN, "http://localhost:3000"],
     credentials: true,
   })
 );

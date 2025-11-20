@@ -2,7 +2,7 @@ import { sendEmail } from "./mailer.js";
 
 export const sendVerificationEmail = async ({ email, token }) => {
   const verificationUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/auth/verify-email?token=${token}`;
-  DOMAIN;
+
   const html = `
     <h2>Verify your email</h2>
     <p>Click below to verify your email address:</p>
